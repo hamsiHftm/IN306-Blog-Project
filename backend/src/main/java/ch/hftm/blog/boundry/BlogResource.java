@@ -9,7 +9,7 @@ import jakarta.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("blogs")
-public class BlogRessource {
+public class BlogResource {
 
     @Inject
     BlogService blogService;
