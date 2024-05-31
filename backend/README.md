@@ -1,5 +1,3 @@
-Your README is well-structured and covers the essential information for your blog application project. Here’s a slightly polished version with a few minor adjustments for clarity and completeness:
-
 # IN306 - Verteilte System (Blog Project)
 
 ## What does this application do?
