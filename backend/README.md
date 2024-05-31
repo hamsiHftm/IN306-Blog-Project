@@ -1,60 +1,84 @@
-# code-with-quarkus
+Your README is well-structured and covers the essential information for your blog application project. Here’s a slightly polished version with a few minor adjustments for clarity and completeness:
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+# IN306 - Verteilte System (Blog Project)
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+## What does this application do?
+This Blog Application is built using Quarkus and provides a simple REST API for managing blog posts. The application allows users to:
+- Retrieve a list of all blog posts.
+- Retrieve a single blog post by its ID.
+- Add new blog posts.
 
-## Running the application in dev mode
+## Project Structure
+The project follows a standard Quarkus structure:
 
-You can run your application in dev mode that enables live coding using:
-```shell script
-./mvnw compile quarkus:dev
+```
+TODO tree structure
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+- **boundary**: REST resource class handling HTTP requests for this application.
+- **service**: Service class containing business logic for operations.
+- **repository**: Repository class for database operations.
+- **entity**: Entity class representing this application.
+- **application.properties**: Configuration file for database and other settings.
 
-## Packaging and running the application
+## How to Start the Project
 
-The application can be packaged using:
-```shell script
-./mvnw package
-```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+### Prerequisites
+- Ensure you have JDK 11 or later installed.
+- Make sure you have Maven installed.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+### Steps to Start the Project
+1. **Clone the Repository**:
+   ```sh
+   git clone https://github.com/hamsiHftm/IN306-Blog-Project.git
+   cd IN306-Blog-Project
+   ```
 
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
-```
+2. **Configure the Database**:
+TODO
+   Update `src/main/resources/application.properties` with your database configuration:
+   ```properties
+   quarkus.datasource.db-kind=postgresql
+   quarkus.datasource.username=<your_db_username>
+   quarkus.datasource.password=<your_db_password>
+   quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/<your_db_name>
+   ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+3. **Run the Application**:
+   Use Maven to start the application:
+   ```sh
+   ./mvnw quarkus:dev
+   ```
 
-## Creating a native executable
+   The application will be available at `http://localhost:8080`.
 
-You can create a native executable using: 
-```shell script
-./mvnw package -Dnative
-```
+## Where are the Logs Saved in Quarkus and How to See Them
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
+TODO
 
-You can then execute your native executable with: `./target/code-with-quarkus-1.0.0-SNAPSHOT-runner`
+In Quarkus, logs are typically written to the console by default. When running the application in development mode (using `quarkus:dev`), you will see the logs directly in the terminal.
 
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
+To configure and view logs:
 
-## Related Guides
+1. **Configure Logging**:
+   You can customize the logging configuration in `application.properties`:
+   ```properties
+   quarkus.log.category."com.example".level=INFO
+   quarkus.log.console.enable=true
+   quarkus.log.file.enable=true
+   quarkus.log.file.path=logs/quarkus.log
+   quarkus.log.file.level=INFO
+   ```
 
-- REST JSON-B ([guide](https://quarkus.io/guides/rest#json-serialisation)): JSON-B serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
+2. **View Logs**:
+    - **Console Logs**: Visible in the terminal where you run the application.
+    - **File Logs**: If configured, logs will be saved to `logs/quarkus.log`.
 
-## Provided Code
+## Change History
+1. **Project created**: Initial project setup.
+2. **Blog Model**: Added the Blog model class.
+3. **DB Connection (repository and service)**: Implemented database connection, repository, and service layers for blog.
+4. **Project structure**: Defined the overall project structure.
+5. **REST API paths added**: Added REST API endpoints for blog operations.
 
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+This README provides clear instructions and an overview of your project, making it easy for others to understand and set up the application.
