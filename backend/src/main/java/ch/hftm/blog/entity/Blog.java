@@ -1,23 +1,46 @@
 package ch.hftm.blog.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
+@Getter
+@Setter
 @Entity
-@Data
 public class Blog {
-    @Id @GeneratedValue private long id;
-    private @Getter @Setter String title;
-    private @Getter @Setter String text;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    public Blog() {}
+    private String title;
 
-    public Blog(String title, String text) {
+    private String content;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BlogLike> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings = new ArrayList<>();
+
+    public Blog(String title, String content) {
         this.title = title;
-        this.text = text;
+        this.content = content;
     }
 }
