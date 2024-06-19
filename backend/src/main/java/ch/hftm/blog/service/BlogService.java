@@ -15,7 +15,7 @@ public class BlogService {
     @Inject
     BlogRepository blogRepository;
 
-    public List<Blog> getBlogs() {
+    public List<Blog> getAllBlogs() {
         var blogs = blogRepository.listAll();
         Log.info("Returning " + blogs.size() + " blogs");
         return blogs;

@@ -1,5 +1,7 @@
 package ch.hftm.blog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@JsonIgnoreProperties(value = {"ratings", "likes"})
 public class Blog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +28,9 @@ public class Blog {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    @Transient
+    private long numberOfLikes;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -43,4 +49,5 @@ public class Blog {
         this.title = title;
         this.content = content;
     }
+    
 }

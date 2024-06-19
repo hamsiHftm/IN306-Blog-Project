@@ -23,9 +23,9 @@ public class BlogServiceTest {
         List<Blog> blogs;
 
         // Act
-        blogsBefore = blogService.getBlogs().size();
+        blogsBefore = blogService.getAllBlogs().size();
         blogService.addBlog(blog);
-        blogs = blogService.getBlogs();
+        blogs = blogService.getAllBlogs();
 
         // Assert
         assertEquals(blogsBefore + 1, blogs.size());

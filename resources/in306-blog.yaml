@@ -1,0 +1,89 @@
+openapi: 3.0.3
+info:
+  title: IN306 Blog - API
+  description: This API provides functionality for managing blog posts and comments for the IN306 Mobile App project. It allows users to create, read, update, and delete blog posts, as well as interact with comments.
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /blogs:
+    get:
+      summary: get all blogs
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogList'
+components:
+  schemas:
+    BlogList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Blog'
+    Blog:
+      type: object
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: datetime
+        updatedAt:
+          type: string
+          format: datetime
+        numberOfLikes:
+          type: number
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+        averageRatings:
+          type: number
+        user:
+          $ref: '#/components/schemas/User'
+    Comment:
+      type: object
+      properties:
+        id:
+          type: number
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: datetime
+        updatedAt:
+          type: string
+          format: datetime
+        user:
+          $ref: '#/components/schemas/User'
+        numberOfLikes:
+          type: number
+    Ratings:
+      type: object
+      properties:
+        id:
+          type: number
+        rating:
+          type: number
+        user:
+          $ref: '#/components/schemas/User'
+    User:
+      type: object
+      properties:
+        id:
+          type: number
+        email:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+
+
+
