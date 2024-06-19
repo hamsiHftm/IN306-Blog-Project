@@ -20,15 +20,35 @@ The project follows a standard Quarkus structure:
 │       └── hftm
 │           └── blog
 │               ├── boundry
-│               │   └── BlogResource.java
+│               │   ├── BlogResource.java
+│               │   └── CommentResource.java
 │               ├── entity
-│               │   └── Blog.java
+│               │   ├── Blog.java
+│               │   ├── BlogLike.java
+│               │   ├── Comment.java
+│               │   ├── CommentLike.java
+│               │   ├── Rating.java
+│               │   └── User.java
 │               ├── repository
-│               │   └── BlogRepository.java
+│               │   ├── BlogLikeRepository.java
+│               │   ├── BlogRepository.java
+│               │   ├── CommentLikeRepository.java
+│               │   ├── CommentRepository.java
+│               │   ├── RatingRepository.java
+│               │   └── UserRepository.java
 │               └── service
-│                   └── BlogService.java
+│                   ├── BlogService.java
+│                   ├── CommentService.java
+│                   └── UserService.java
 └── resources
     └── application.properties
+    
+
+└── resources
+    ├── Blog Insert.sql
+    ├── Blog.drawio.png
+    ├── User Insert.sql
+    └── in306-blog.yaml
 
 ```
 - **boundary**: Contains REST resource classes responsible for handling HTTP requests.
@@ -79,5 +99,6 @@ TODO
 4. **Project structure**: Defined the overall project structure.
 5. **REST API paths added**: Added REST API endpoints for blog operations.
 6. **Entity**: I tried adding a new entity, but it didn't work. I need help fixing this or removing the entity entirely.
-
+7. **Entities**: All entity classes have been added for the project. 
+8. **OpenAPI**: An OpenAPI specification has been added to the resources folder, but it is not yet complete. Due to time constraints, I was unable to finish it.
 This README provides a comprehensive overview of the blog application, including its functionality, project structure, additional classes, ideas for future enhancements, and instructions for setting up and running the application.
