@@ -102,3 +102,5 @@ TODO
 7. **Entities**: All entity classes have been added for the project. 
 8. **OpenAPI**: An OpenAPI specification has been added to the resources folder, but it is not yet complete. Due to time constraints, I was unable to finish it.
 This README provides a comprehensive overview of the blog application, including its functionality, project structure, additional classes, ideas for future enhancements, and instructions for setting up and running the application.
+9. **Blog HTTP requests**: Implemented PUT, POST, GET, and DELETE routes for the Blog entity.
+10. **Error-Response**: Added thorough error handling in the way responses are managed.
