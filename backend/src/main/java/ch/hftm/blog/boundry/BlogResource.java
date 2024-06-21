@@ -1,6 +1,9 @@
 package ch.hftm.blog.boundry;
 
+import ch.hftm.blog.dto.BlogListResponseDTO;
+import ch.hftm.blog.dto.BlogResponseDTO;
 import ch.hftm.blog.dto.CreateBlogRequestDTO;
+import ch.hftm.blog.dto.ErrorResponseDTO;
 import ch.hftm.blog.entity.Blog;
 import ch.hftm.blog.service.BlogService;
 import jakarta.inject.Inject;
@@ -10,8 +13,10 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("blogs")
 public class BlogResource {
@@ -21,12 +26,17 @@ public class BlogResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get all blogs with pagination and search")
     public Response getAllBlogs(@QueryParam("searchTitle") String searchTitle,
                                 @QueryParam("limit") @DefaultValue("10") int limit,
                                 @QueryParam("offset") @DefaultValue("0") int offset) {
         try {
             List<Blog> blogs = blogService.getAllBlogs(searchTitle, limit, offset);
-            return Response.ok(blogs).build();
+            List<BlogResponseDTO> blogDTOs = blogs.stream()
+                    .map(BlogResponseDTO::new)
+                    .collect(Collectors.toList());
+            BlogListResponseDTO responseDTO = new BlogListResponseDTO(blogDTOs, offset, limit);
+            return Response.ok(responseDTO).build();
         } catch (Exception e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR)
                     .entity("Error retrieving blogs: " + e.getMessage()).build();
@@ -73,10 +83,11 @@ public class BlogResource {
         try {
             var blog = blogDTO.toBlog();
             Blog createdBlog = blogService.addBlog(blog);
-            return Response.status(Status.CREATED).entity(createdBlog).build();
+            BlogResponseDTO blogResponseDTO = new BlogResponseDTO(createdBlog);
+            return Response.status(Status.CREATED).entity(blogResponseDTO).build();
         } catch (Exception e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error adding blog: " + e.getMessage()).build();
+                    .entity(new ErrorResponseDTO(e.getMessage())).build();
         }
     }
 
@@ -93,7 +104,7 @@ public class BlogResource {
             return Response.ok(updatedBlog).build();
         } catch (Exception e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error updating blog: " + e.getMessage()).build();
+                    .entity(new ErrorResponseDTO(e.getMessage())).build();
         }
     }
 

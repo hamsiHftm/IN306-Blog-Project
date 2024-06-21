@@ -107,3 +107,4 @@ This README provides a comprehensive overview of the blog application, including
 11. **Validation**: Validation added for entities.
 12. **User Repository**: Necessary User Repository added.
 13. **CreateBlogRequestDTO Schema:** Schema for creating blog request added
+14. **Schema improved**: Schema for get all blogs added
