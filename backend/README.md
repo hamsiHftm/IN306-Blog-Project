@@ -104,3 +104,4 @@ TODO
 This README provides a comprehensive overview of the blog application, including its functionality, project structure, additional classes, ideas for future enhancements, and instructions for setting up and running the application.
 9. **Blog HTTP requests**: Implemented PUT, POST, GET, and DELETE routes for the Blog entity.
 10. **Error-Response**: Added thorough error handling in the way responses are managed.
+11. **Validation**: Validation added for entities.

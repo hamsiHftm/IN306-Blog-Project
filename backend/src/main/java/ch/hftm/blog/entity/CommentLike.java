@@ -18,9 +18,11 @@ public class CommentLike {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "comment_id")
+    @Column(nullable = false)
     private Comment comment;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @Column(nullable = false)
     private User user;
 }

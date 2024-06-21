@@ -3,6 +3,8 @@ package ch.hftm.blog.boundry;
 import ch.hftm.blog.entity.Blog;
 import ch.hftm.blog.service.BlogService;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -49,7 +51,7 @@ public class BlogResource {
     @GET
     @Path("favourites/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getFavouritedBlogsByUserId(@PathParam("userId") Long userId,
+    public Response getFavoriteBlogsByUserId(@PathParam("userId") Long userId,
                                                @QueryParam("searchTitle") String searchTitle,
                                                @QueryParam("limit") @DefaultValue("10") int limit,
                                                @QueryParam("offset") @DefaultValue("0") int offset) {
@@ -65,7 +67,8 @@ public class BlogResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addBlog(Blog blog) {
+    @Transactional
+    public Response addBlog(@Valid Blog blog) {
         try {
             Blog createdBlog = blogService.addBlog(blog);
             return Response.status(Status.CREATED).entity(createdBlog).build();
@@ -79,7 +82,7 @@ public class BlogResource {
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateBlog(@PathParam("id") Long id, Blog blog) {
+    public Response updateBlog(@PathParam("id") Long id, @Valid Blog blog) {
         try {
             Blog updatedBlog = blogService.updateBlog(id, blog);
             if (updatedBlog == null) {

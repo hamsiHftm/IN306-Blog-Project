@@ -16,10 +16,12 @@ public class BlogLike {
 
     @ManyToOne
     @JoinColumn(name = "blog_id")
+    @Column(nullable = false)
     private Blog blog;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @Column(nullable = false)
     private User user;
 
     public BlogLike(Blog blog, User user) {
