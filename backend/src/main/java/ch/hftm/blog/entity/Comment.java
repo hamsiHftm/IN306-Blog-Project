@@ -27,13 +27,11 @@ public class Comment {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "blog_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "blog_id", nullable = false)
     private Blog blog;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)

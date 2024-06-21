@@ -38,8 +38,7 @@ public class Blog {
     private long numberOfLikes;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -17,12 +17,10 @@ public class CommentLike {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "comment_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "comment_id", nullable = false)
     private Comment comment;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

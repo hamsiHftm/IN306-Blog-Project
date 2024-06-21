@@ -15,13 +15,11 @@ public class BlogLike {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "blog_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "blog_id", nullable = false)
     private Blog blog;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public BlogLike(Blog blog, User user) {
