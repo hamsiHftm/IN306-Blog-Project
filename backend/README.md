@@ -106,3 +106,4 @@ This README provides a comprehensive overview of the blog application, including
 10. **Error-Response**: Added thorough error handling in the way responses are managed.
 11. **Validation**: Validation added for entities.
 12. **User Repository**: Necessary User Repository added.
+13. **CreateBlogRequestDTO Schema:** Schema for creating blog request added

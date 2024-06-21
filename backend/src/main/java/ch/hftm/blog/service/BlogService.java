@@ -31,7 +31,10 @@ public class BlogService {
         Blog blog = blogRepository.findById(id);
         if (includeDetails && blog != null) {
             blog.setNumberOfLikes(blog.getLikes().size());
-            blog.getComments().size();
+            int commentSize = blog.getComments().size();
+            Log.info("Blog found with " + commentSize + " comments and " + blog.getNumberOfLikes() + ".");
+        } else {
+            Log.warn("No blog found with id " + id);
         }
         return blog;
     }
@@ -62,6 +65,9 @@ public class BlogService {
             blog.setContent(updatedBlog.getContent());
             blog.setUpdatedAt(updatedBlog.getUpdatedAt());
             blogRepository.persist(blog);
+            Log.info("Updated blog " + updatedBlog.getTitle());
+        } else {
+            Log.warn("No blog found with id " + id + "to update");
         }
         return blog;
     }
@@ -72,6 +78,8 @@ public class BlogService {
         if (blog != null) {
             blogRepository.delete(blog);
             Log.info("Deleted blog with id " + id);
+        }else {
+            Log.warn("No blog found with id " + id + "to delete");
         }
     }
 }

@@ -1,5 +1,6 @@
 package ch.hftm.blog.boundry;
 
+import ch.hftm.blog.dto.CreateBlogRequestDTO;
 import ch.hftm.blog.entity.Blog;
 import ch.hftm.blog.service.BlogService;
 import jakarta.inject.Inject;
@@ -68,8 +69,9 @@ public class BlogResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response addBlog(@Valid Blog blog) {
+    public Response addBlog(@Valid CreateBlogRequestDTO blogDTO) {
         try {
+            var blog = blogDTO.toBlog();
             Blog createdBlog = blogService.addBlog(blog);
             return Response.status(Status.CREATED).entity(createdBlog).build();
         } catch (Exception e) {
