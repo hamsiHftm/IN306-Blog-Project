@@ -19,7 +19,7 @@ public class UserService {
     }
 
     public User getUserByEmail(String email) {
-        return userRepository.find("email", email).firstResult();
+        return userRepository.findByEmail(email);
     }
 
     public User createUser(User user) {
