@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 
 import java.util.Objects;
 
@@ -23,6 +24,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
+    @Operation(summary = "Create new user")
     public Response createUser(@Valid UserCreateRequestDTO requestDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
@@ -49,6 +51,7 @@ public class UserResource {
     @Path("/login/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Login user")
     public Response loginUser(UserLoginDTO userLoginDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
@@ -79,6 +82,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
+    @Operation(summary = "Update user firstname and lastname by ID")
     public Response updateUser(@PathParam("id") Long id, UserUpdateRequestDTO requestDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
@@ -104,6 +108,7 @@ public class UserResource {
     @DELETE
     @Path("{id}")
     @Transactional
+    @Operation(summary = "Delete user by ID")
     public Response deleteUser(@PathParam("id") Long id) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
@@ -131,6 +136,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
+    @Operation(summary = "Change user password by ID")
     public Response changePassword(@PathParam("id") Long id, UserChangePasswordRequestDTO requestDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
