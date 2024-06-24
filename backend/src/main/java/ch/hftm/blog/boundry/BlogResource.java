@@ -39,8 +39,8 @@ public class BlogResource {
         boolean isSuccess = true;
         try {
             List<Blog> blogs = blogService.getAllBlogs(searchTitle, limit, offset);
-            List<BlogResponseDTO> blogDTOs = blogs.stream()
-                    .map(BlogResponseDTO::new)
+            List<BlogResponseDTO1> blogDTOs = blogs.stream()
+                    .map(BlogResponseDTO1::new)
                     .collect(Collectors.toList());
             dto = new BlogListResponseDTO(blogDTOs, offset, limit, searchTitle);
         } catch (Exception e) {
@@ -89,8 +89,8 @@ public class BlogResource {
         boolean isSuccess = true;
         try {
             List<Blog> blogs = blogService.getFavoriteBlogsByUserId(userId, searchTitle, limit, offset);
-            List<BlogResponseDTO> blogDTOs = blogs.stream()
-                    .map(BlogResponseDTO::new)
+            List<BlogResponseDTO1> blogDTOs = blogs.stream()
+                    .map(BlogResponseDTO1::new)
                     .collect(Collectors.toList());
             dto = new BlogListResponseDTO(blogDTOs, offset, limit, searchTitle);
         } catch (Exception e) {
@@ -120,7 +120,7 @@ public class BlogResource {
             } else {
                 var blog = blogDTO.toBlog(user);
                 Blog createdBlog = blogService.addBlog(blog);
-                dto = new BlogResponseDTO(createdBlog);
+                dto = new BlogResponseDTO1(createdBlog);
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
@@ -147,7 +147,7 @@ public class BlogResource {
                 isSuccess = false;
             } else {
                 blogService.updateBlog(foundBlog, requestDTO.title(), requestDTO.content());
-                dto = new BlogResponseDTO(foundBlog);
+                dto = new BlogResponseDTO1(foundBlog);
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
@@ -173,7 +173,7 @@ public class BlogResource {
                 isSuccess = false;
             } else {
                 blogService.deleteBlog(blog);
-                dto = new BlogResponseDTO(blog);
+                dto = new BlogResponseDTO1(blog);
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;

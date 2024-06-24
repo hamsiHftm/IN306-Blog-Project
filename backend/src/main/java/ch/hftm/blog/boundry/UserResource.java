@@ -128,7 +128,6 @@ public class UserResource {
             isSuccess = false;
         }
         return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
-
     }
 
     @PATCH

@@ -11,7 +11,7 @@ import java.util.List;
 @Dependent
 public class CommentService {
     @Inject
-    private CommentRepository commentRepository;
+    CommentRepository commentRepository;
 
     public List<Comment> getAllCommentsForBlog(String blogId) {
         return commentRepository.findByBlogId(blogId);
@@ -21,5 +21,19 @@ public class CommentService {
         Log.info("Adding comment: " + comment);
         commentRepository.persist(comment);
         return comment;
+    }
+
+    public Comment updateComment(Comment comment, String content) {
+        comment.setContent(content);
+        commentRepository.persist(comment);
+        return comment;
+    }
+
+    public void deleteComment(Comment comment) {
+        commentRepository.delete(comment);
+    }
+
+    public Comment getCommentById(Long id) {
+        return commentRepository.findById(id);
     }
 }
