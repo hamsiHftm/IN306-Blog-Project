@@ -108,3 +108,4 @@ This README provides a comprehensive overview of the blog application, including
 12. **User Repository**: Necessary User Repository added.
 13. **CreateBlogRequestDTO Schema:** Schema for creating blog request added
 14. **Schema improved**: Schema for get all blogs added
+15. **application.properties**: Property file updated for DB data
