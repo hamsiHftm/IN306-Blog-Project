@@ -4,4 +4,5 @@ VALUES
     ('user2@example.com', 'password2', 'Jane', 'Smith');
 
 SELECT * FROM User;
+SELECT * FROM Comment;
 

@@ -58,28 +58,17 @@ public class BlogService {
     }
 
     @Transactional
-    public Blog updateBlog(Long id, Blog updatedBlog) {
-        Blog blog = blogRepository.findById(id);
-        if (blog != null) {
-            blog.setTitle(updatedBlog.getTitle());
-            blog.setContent(updatedBlog.getContent());
-            blog.setUpdatedAt(updatedBlog.getUpdatedAt());
-            blogRepository.persist(blog);
-            Log.info("Updated blog " + updatedBlog.getTitle());
-        } else {
-            Log.warn("No blog found with id " + id + "to update");
-        }
-        return blog;
+    public void updateBlog(Blog blog, String title, String content) {
+        blog.setTitle(title);
+        blog.setContent(content);
+        blogRepository.persist(blog);
+        Log.info("Updated blog " + blog.getId());
     }
 
     @Transactional
-    public void deleteBlog(Long id) {
-        Blog blog = blogRepository.findById(id);
-        if (blog != null) {
-            blogRepository.delete(blog);
-            Log.info("Deleted blog with id " + id);
-        }else {
-            Log.warn("No blog found with id " + id + "to delete");
-        }
+    public void deleteBlog(Blog blog) {
+        long id = blog.getId();
+        blogRepository.delete(blog);
+        Log.info("Deleted blog with id " + id);
     }
 }

@@ -1,11 +1,12 @@
 package ch.hftm.blog.boundry;
 
-import ch.hftm.blog.dto.BlogListResponseDTO;
-import ch.hftm.blog.dto.BlogResponseDTO;
-import ch.hftm.blog.dto.CreateBlogRequestDTO;
+import ch.hftm.blog.dto.ResponseDTO;
+import ch.hftm.blog.dto.blog.*;
 import ch.hftm.blog.dto.ErrorResponseDTO;
 import ch.hftm.blog.entity.Blog;
+import ch.hftm.blog.entity.User;
 import ch.hftm.blog.service.BlogService;
+import ch.hftm.blog.service.UserService;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -24,100 +25,161 @@ public class BlogResource {
     @Inject
     BlogService blogService;
 
+    @Inject
+    UserService userService;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Get all blogs with pagination and search")
     public Response getAllBlogs(@QueryParam("searchTitle") String searchTitle,
                                 @QueryParam("limit") @DefaultValue("10") int limit,
                                 @QueryParam("offset") @DefaultValue("0") int offset) {
+        Response.Status status = Response.Status.OK;
+        Object dto = null;
+        boolean isSuccess = true;
         try {
             List<Blog> blogs = blogService.getAllBlogs(searchTitle, limit, offset);
             List<BlogResponseDTO> blogDTOs = blogs.stream()
                     .map(BlogResponseDTO::new)
                     .collect(Collectors.toList());
-            BlogListResponseDTO responseDTO = new BlogListResponseDTO(blogDTOs, offset, limit);
-            return Response.ok(responseDTO).build();
+            dto = new BlogListResponseDTO(blogDTOs, offset, limit, searchTitle);
         } catch (Exception e) {
-            return Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error retrieving blogs: " + e.getMessage()).build();
+            status = Response.Status.INTERNAL_SERVER_ERROR;
+            dto = new ErrorResponseDTO(e.getMessage());
+            isSuccess = false;
         }
+        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get blog by ID")
     public Response getBlogById(@PathParam("id") Long id) {
+        Response.Status status = Response.Status.OK;
+        Object dto = null;
+        boolean isSuccess = true;
         try {
             Blog blog = blogService.getBlogById(id, true);
             if (blog == null) {
-                return Response.status(Status.NOT_FOUND).entity("Blog not found").build();
+                status = Status.NOT_FOUND;
+                dto = new ErrorResponseDTO("Blog not found");
+                isSuccess = false;
+            } else {
+                dto = new BlogDetailResponseDTO(blog);
             }
-            return Response.ok(blog).build();
         } catch (Exception e) {
-            return Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error retrieving blog: " + e.getMessage()).build();
+            status = Response.Status.INTERNAL_SERVER_ERROR;
+            dto = new ErrorResponseDTO(e.getMessage());
+            isSuccess = false;
         }
+        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
     }
 
     @GET
     @Path("favourites/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get favorite blogs by user ID with pagination and search")
     public Response getFavoriteBlogsByUserId(@PathParam("userId") Long userId,
-                                               @QueryParam("searchTitle") String searchTitle,
-                                               @QueryParam("limit") @DefaultValue("10") int limit,
-                                               @QueryParam("offset") @DefaultValue("0") int offset) {
+                                             @QueryParam("searchTitle") String searchTitle,
+                                             @QueryParam("limit") @DefaultValue("10") int limit,
+                                             @QueryParam("offset") @DefaultValue("0") int offset) {
+        Response.Status status = Response.Status.OK;
+        Object dto = null;
+        boolean isSuccess = true;
         try {
             List<Blog> blogs = blogService.getFavoriteBlogsByUserId(userId, searchTitle, limit, offset);
-            return Response.ok(blogs).build();
+            List<BlogResponseDTO> blogDTOs = blogs.stream()
+                    .map(BlogResponseDTO::new)
+                    .collect(Collectors.toList());
+            dto = new BlogListResponseDTO(blogDTOs, offset, limit, searchTitle);
         } catch (Exception e) {
-            return Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error retrieving favourite blogs: " + e.getMessage()).build();
+            status = Response.Status.INTERNAL_SERVER_ERROR;
+            dto = new ErrorResponseDTO(e.getMessage());
+            isSuccess = false;
         }
+        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response addBlog(@Valid CreateBlogRequestDTO blogDTO) {
+    @Operation(summary = "Add a new blog")
+    public Response addBlog(@Valid BlogCreateRequestDTO blogDTO) {
+        Response.Status status = Response.Status.OK;
+        Object dto = null;
+        boolean isSuccess = true;
         try {
-            var blog = blogDTO.toBlog();
-            Blog createdBlog = blogService.addBlog(blog);
-            BlogResponseDTO blogResponseDTO = new BlogResponseDTO(createdBlog);
-            return Response.status(Status.CREATED).entity(blogResponseDTO).build();
+            // Retrieve the User entity based on the userId from blogDTO
+            User user = userService.getUserById(blogDTO.getUserId());
+            if (user == null) {
+                status = Status.BAD_REQUEST;
+                dto = new ErrorResponseDTO("User with id " + blogDTO.getUserId() + " not found");
+                isSuccess = false;
+            } else {
+                var blog = blogDTO.toBlog(user);
+                Blog createdBlog = blogService.addBlog(blog);
+                dto = new BlogResponseDTO(createdBlog);
+            }
         } catch (Exception e) {
-            return Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity(new ErrorResponseDTO(e.getMessage())).build();
+            status = Response.Status.INTERNAL_SERVER_ERROR;
+            dto = new ErrorResponseDTO(e.getMessage());
+            isSuccess = false;
         }
+        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
     }
 
     @PATCH
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateBlog(@PathParam("id") Long id, @Valid Blog blog) {
+    @Operation(summary = "Update a blog by ID")
+    public Response updateBlog(@PathParam("id") Long id, BlogUpdateRequestDTO requestDTO) {
+        Response.Status status = Response.Status.OK;
+        Object dto = null;
+        boolean isSuccess = true;
         try {
-            Blog updatedBlog = blogService.updateBlog(id, blog);
-            if (updatedBlog == null) {
-                return Response.status(Status.NOT_FOUND).entity("Blog not found").build();
+            Blog foundBlog = blogService.getBlogById(id, false);
+            if (foundBlog == null) {
+                status = Response.Status.NOT_FOUND;
+                dto = new ErrorResponseDTO("Blog not found");
+                isSuccess = false;
+            } else {
+                blogService.updateBlog(foundBlog, requestDTO.title(), requestDTO.content());
+                dto = new BlogResponseDTO(foundBlog);
             }
-            return Response.ok(updatedBlog).build();
         } catch (Exception e) {
-            return Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity(new ErrorResponseDTO(e.getMessage())).build();
+            status = Response.Status.INTERNAL_SERVER_ERROR;
+            dto = new ErrorResponseDTO(e.getMessage());
+            isSuccess = false;
         }
+        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
     }
 
     @DELETE
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Delete a blog by ID")
     public Response deleteBlog(@PathParam("id") Long id) {
+        Response.Status status = Response.Status.OK;
+        Object dto = null;
+        boolean isSuccess = true;
         try {
-            blogService.deleteBlog(id);
-            return Response.noContent().build();
+            Blog blog = blogService.getBlogById(id, false);
+            if (blog == null) {
+                status = Response.Status.NOT_FOUND;
+                dto = new ErrorResponseDTO("Blog not found");
+                isSuccess = false;
+            } else {
+                blogService.deleteBlog(blog);
+                dto = new BlogResponseDTO(blog);
+            }
         } catch (Exception e) {
-            return Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error deleting blog: " + e.getMessage()).build();
+            status = Response.Status.INTERNAL_SERVER_ERROR;
+            dto = new ErrorResponseDTO(e.getMessage());
+            isSuccess = false;
         }
+        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
     }
 }
