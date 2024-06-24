@@ -109,3 +109,4 @@ This README provides a comprehensive overview of the blog application, including
 13. **CreateBlogRequestDTO Schema:** Schema for creating blog request added
 14. **Schema improved**: Schema for get all blogs added
 15. **application.properties**: Property file updated for DB data
+16. **User HTTP requests**: Http Route fully implemented for user model with schema

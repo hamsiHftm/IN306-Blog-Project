@@ -14,14 +14,12 @@ public class UserService {
     @Inject
     UserRepository userRepository;
 
-    public List<User> findAll() {
-        var users = userRepository.listAll();
-        Log.info("Returning " + users.size() + " users");
-        return users;
-    }
-
     public User getUserById(Long id) {
         return userRepository.findById(id);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.find("email", email).firstResult();
     }
 
     public User createUser(User user) {
@@ -31,40 +29,26 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUser(Long id, User updatedUser) {
-        User user = userRepository.findById(id);
-        if (user != null) {
-            user.setFirstName(updatedUser.getFirstName());
-            user.setLastName(updatedUser.getLastName());
-            userRepository.persist(user);
-            Log.info("Updated user " + updatedUser.getEmail());
-        } else {
-            Log.warn("No user found with id " + id + " to update");
-        }
+    public User updateUserName(User user, String firstName, String lastName) {
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        userRepository.persist(user);
+        Log.info("Updated user " + user.getEmail());
         return user;
     }
 
     @Transactional
-    public User changePassword(Long id, String newPassword) {
-        User user = userRepository.findById(id);
-        if (user != null) {
-            user.setPassword(newPassword); // Assuming you have a setPassword method in User entity
-            userRepository.persist(user);
-            Log.info("Password changed for user " + user.getEmail());
-        } else {
-            Log.warn("No user found with id " + id + " to change password");
-        }
+    public User changePassword(User user, String newPassword) {
+        user.setPassword(newPassword); // Assuming you have a setPassword method in User entity
+        userRepository.persist(user);
+        Log.info("Password changed for user " + user.getEmail());
         return user;
     }
 
     @Transactional
-    public void deleteUser(Long id) {
-        User user = userRepository.findById(id);
-        if (user != null) {
-            userRepository.delete(user);
-            Log.info("Deleted user with id " + id);
-        } else {
-            Log.warn("No user found with id " + id + " to delete");
-        }
+    public void deleteUser(User user) {
+        Long id = user.getId();
+        userRepository.delete(user);
+        Log.info("Deleted user with id " + id);
     }
 }

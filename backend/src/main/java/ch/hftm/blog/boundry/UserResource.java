@@ -1,5 +1,8 @@
 package ch.hftm.blog.boundry;
 
+import ch.hftm.blog.dto.ErrorResponseDTO;
+import ch.hftm.blog.dto.ResponseDTO;
+import ch.hftm.blog.dto.user.*;
 import ch.hftm.blog.entity.User;
 import ch.hftm.blog.service.UserService;
 import jakarta.inject.Inject;
@@ -9,38 +12,66 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.Objects;
+
 @Path("user")
 public class UserResource {
     @Inject
     UserService userService;
 
-    @GET
-    @Path("{id}")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUser(@PathParam("id") Long id) {
+    @Transactional
+    public Response createUser(@Valid UserCreateRequestDTO requestDTO) {
+        Response.Status status = Response.Status.OK;
+        Object dto = null;
+        boolean isSuccess = true;
         try {
-            User user = userService.getUserById(id);
-            if (user == null) {
-                return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
+            User foundUser = userService.getUserByEmail(requestDTO.email());
+            if (foundUser != null) {
+                status = Response.Status.BAD_REQUEST;
+                dto = new ErrorResponseDTO("User already exists");
+                isSuccess = false;
+            } else {
+                User createdUser = userService.createUser(requestDTO.toUser());
+                dto = new UserDetailResponseDTO(createdUser);
             }
-            return Response.ok(user).build();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error retrieving User: " + e.getMessage()).build();
+            status = Response.Status.INTERNAL_SERVER_ERROR;
+            dto = new ErrorResponseDTO(e.getMessage());
+            isSuccess = false;
         }
+        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
     }
 
-    @DELETE
-    @Path("{id}")
-    @Transactional
-    public Response deleteUser(@PathParam("id") Long id) {
+    @POST
+    @Path("/login/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loginUser(UserLoginDTO userLoginDTO) {
+        Response.Status status = Response.Status.OK;
+        Object dto = null;
+        boolean isSuccess = true;
         try {
-            userService.deleteUser(id);
-            return Response.noContent().build();
+            User user = userService.getUserByEmail(userLoginDTO.email());
+            if (user == null) {
+                status = Response.Status.NOT_FOUND;
+                dto = new ErrorResponseDTO("User not found with email");
+                isSuccess = false;
+            } else if (!user.getPassword().equals(userLoginDTO.password())) {
+                status = Response.Status.FORBIDDEN;
+                dto = new ErrorResponseDTO("Wrong password");
+                isSuccess = false;
+            } else {
+                dto = new UserDetailResponseDTO(user);
+            }
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error deleting User: " + e.getMessage()).build();
+            status = Response.Status.INTERNAL_SERVER_ERROR;
+            dto = new ErrorResponseDTO(e.getMessage());
+            isSuccess = false;
         }
+        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
     }
 
     @PUT
@@ -48,17 +79,51 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response updateUser(@PathParam("id") Long id, @Valid User updatedUser) {
+    public Response updateUser(@PathParam("id") Long id, UserUpdateRequestDTO requestDTO) {
+        Response.Status status = Response.Status.OK;
+        Object dto = null;
+        boolean isSuccess = true;
         try {
-            User user = userService.updateUser(id, updatedUser);
-            if (user == null) {
-                return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
+            User foundUser = userService.getUserById(id);
+            if (foundUser == null) {
+                status = Response.Status.NOT_FOUND;
+                dto = new ErrorResponseDTO("User not found with id");
+                isSuccess = false;
+            } else {
+                User user = userService.updateUserName(foundUser, requestDTO.firstname(), requestDTO.lastname());
+                dto = new UserDetailResponseDTO(user);
             }
-            return Response.ok(user).build();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error updating User: " + e.getMessage()).build();
+            status = Response.Status.INTERNAL_SERVER_ERROR;
+            dto = new ErrorResponseDTO(e.getMessage());
+            isSuccess = false;
         }
+        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+    }
+
+    @DELETE
+    @Path("{id}")
+    @Transactional
+    public Response deleteUser(@PathParam("id") Long id) {
+        Response.Status status = Response.Status.OK;
+        Object dto = null;
+        boolean isSuccess = true;
+        try {
+            User user = userService.getUserById(id);
+            if (user == null) {
+                status = Response.Status.NOT_FOUND;
+                dto = new ErrorResponseDTO("User not found");
+                isSuccess = false;
+            } else {
+                userService.deleteUser(user);
+            }
+        } catch (Exception e) {
+            status = Response.Status.INTERNAL_SERVER_ERROR;
+            dto = new ErrorResponseDTO(e.getMessage());
+            isSuccess = false;
+        }
+        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+
     }
 
     @PATCH
@@ -66,30 +131,28 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response changePassword(@PathParam("id") Long id, String newPassword) {
+    public Response changePassword(@PathParam("id") Long id, UserChangePasswordRequestDTO requestDTO) {
+        Response.Status status = Response.Status.OK;
+        Object dto = null;
+        boolean isSuccess = true;
         try {
-            User user = userService.changePassword(id, newPassword);
-            if (user == null) {
-                return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
+            User foundUser = userService.getUserById(id);
+            if (foundUser == null) {
+                status = Response.Status.NOT_FOUND;
+                dto = new ErrorResponseDTO("User not found with id");
+                isSuccess = false;
+            } else if (!foundUser.getPassword().equals(requestDTO.confirmPassword())) {
+                status = Response.Status.FORBIDDEN;
+                dto = new ErrorResponseDTO("Wrong password");
+                isSuccess = false;
+            } else {
+                User user = userService.changePassword(foundUser, requestDTO.newPassword());
             }
-            return Response.ok("Password changed successfully").build();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error changing password: " + e.getMessage()).build();
+            status = Response.Status.INTERNAL_SERVER_ERROR;
+            dto = new ErrorResponseDTO(e.getMessage());
+            isSuccess = false;
         }
-    }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response createUser(@Valid User user) {
-        try {
-            User createdUser = userService.createUser(user);
-            return Response.status(Response.Status.CREATED).entity(createdUser).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error creating User: " + e.getMessage()).build();
-        }
+        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
     }
 }

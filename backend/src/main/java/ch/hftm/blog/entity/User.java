@@ -1,10 +1,8 @@
 package ch.hftm.blog.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,9 +15,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty
     @Column(unique = true, nullable = false, updatable = false)
     private String email;
 
+    @NotEmpty
     @Column(nullable = false)
     private String password;
 
