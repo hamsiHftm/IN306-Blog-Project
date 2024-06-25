@@ -1,6 +1,6 @@
 package ch.hftm.blog.dto.blog;
 
-import ch.hftm.blog.dto.comment.CommentResponseDTO;
+import ch.hftm.blog.dto.comment.CommentResponseDTO2;
 import ch.hftm.blog.dto.user.UserDetailResponseDTO;
 import ch.hftm.blog.entity.Blog;
 
@@ -15,8 +15,8 @@ public record BlogDetailResponseDTO(
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         long numberOfLikes,
-        List<CommentResponseDTO> commentResponseDTOs,
-        UserDetailResponseDTO userDetailResponseDTO) {
+        List<CommentResponseDTO2> comments,
+        UserDetailResponseDTO user) {
 
     public BlogDetailResponseDTO(Blog blog) {
         this(blog.getId(),
@@ -26,7 +26,7 @@ public record BlogDetailResponseDTO(
                 blog.getUpdatedAt(),
                 blog.getNumberOfLikes(),
                 blog.getComments().stream()
-                        .map(CommentResponseDTO::new)
+                        .map(CommentResponseDTO2::new)
                         .collect(Collectors.toList()),
                 new UserDetailResponseDTO(blog.getUser()));
     }

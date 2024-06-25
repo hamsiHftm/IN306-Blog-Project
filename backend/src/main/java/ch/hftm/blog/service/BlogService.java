@@ -15,12 +15,12 @@ public class BlogService {
     @Inject
     BlogRepository blogRepository;
 
-    public List<Blog> getAllBlogs(String searchTitle, int limit, int offset) {
+    public List<Blog> getAllBlogs(String searchTitle, String order_by, int limit, int offset, boolean asc) {
         List<Blog> blogs;
         if (searchTitle == null || searchTitle.isEmpty()) {
-            blogs = blogRepository.find("order by createdAt desc").page(offset, limit).list();
+            blogs = blogRepository.findAllBlogsWithLimitAndOffset(limit, offset, order_by, asc);
         } else {
-            blogs = blogRepository.find("title like ?1 order by createdAt desc", "%" + searchTitle + "%").page(offset, limit).list();
+            blogs = blogRepository.findAllBlogsWithTitleAndLimitAndOffset(searchTitle, limit, offset, order_by, asc);
         }
         Log.info("Returning " + blogs.size() + " blogs");
         return blogs;
@@ -39,13 +39,8 @@ public class BlogService {
         return blog;
     }
 
-    public List<Blog> getFavoriteBlogsByUserId(Long userId, String searchTitle, int limit, int offset) {
-        List<Blog> blogs;
-        if (searchTitle == null || searchTitle.isEmpty()) {
-            blogs = blogRepository.find("user.id = ?1 and isFavourite = true order by createdAt desc", userId).page(offset, limit).list();
-        } else {
-            blogs = blogRepository.find("user.id = ?1 and isFavourite = true and title like ?2 order by createdAt desc", userId, "%" + searchTitle + "%").page(offset, limit).list();
-        }
+    public List<Blog> getFavoriteBlogsByUserId(Long userId, String searchTitle, String orderBy, int limit, int offset, boolean asc) {
+        List<Blog> blogs = blogRepository.findFavoriteBlogsByUserId(userId, searchTitle, limit, offset, orderBy, asc);
         Log.info("Returning " + blogs.size() + " favorite blogs for user " + userId);
         return blogs;
     }
@@ -59,8 +54,12 @@ public class BlogService {
 
     @Transactional
     public void updateBlog(Blog blog, String title, String content) {
-        blog.setTitle(title);
-        blog.setContent(content);
+        if (title == null || title.isEmpty()) {
+            blog.setTitle(title);
+        }
+        if (content == null || content.isEmpty()) {
+            blog.setContent(content);
+        }
         blogRepository.persist(blog);
         Log.info("Updated blog " + blog.getId());
     }
@@ -70,5 +69,19 @@ public class BlogService {
         long id = blog.getId();
         blogRepository.delete(blog);
         Log.info("Deleted blog with id " + id);
+    }
+
+    @Transactional
+    public long countAllBlogs(String searchTitle, Long userId) {
+        if (userId == null) {
+            if (searchTitle == null || searchTitle.isEmpty()) {
+                return blogRepository.count();
+            } else {
+                return blogRepository.count("title like ?1", "%" + searchTitle + "%");
+            }
+        } else {
+            return blogRepository.countFavoriteBlogsByUserId(userId, searchTitle);
+        }
+
     }
 }

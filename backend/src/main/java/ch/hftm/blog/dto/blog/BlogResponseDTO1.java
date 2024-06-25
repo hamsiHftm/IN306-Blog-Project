@@ -11,7 +11,7 @@ public record BlogResponseDTO1(long id,
                                LocalDateTime createdAt,
                                LocalDateTime updatedAt,
                                long numberOfLikes,
-                               UserDetailResponseDTO userDetailResponseDTO) {
+                               UserDetailResponseDTO user) {
     public BlogResponseDTO1(Blog blog) {
         this(blog.getId(), blog.getTitle(), blog.getContent(), blog.getCreatedAt(), blog.getUpdatedAt(), blog.getNumberOfLikes(), new UserDetailResponseDTO(blog.getUser()));
     }

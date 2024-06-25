@@ -33,16 +33,25 @@ public class BlogResource {
     @Operation(summary = "Get all blogs with pagination and search")
     public Response getAllBlogs(@QueryParam("searchTitle") String searchTitle,
                                 @QueryParam("limit") @DefaultValue("10") int limit,
-                                @QueryParam("offset") @DefaultValue("0") int offset) {
+                                @QueryParam("offset") @DefaultValue("0") int offset,
+                                @QueryParam("orderBy") @DefaultValue("createdAt") String orderBy,
+                                @QueryParam("asc") @DefaultValue("true") boolean asc) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
         try {
-            List<Blog> blogs = blogService.getAllBlogs(searchTitle, limit, offset);
-            List<BlogResponseDTO1> blogDTOs = blogs.stream()
-                    .map(BlogResponseDTO1::new)
-                    .collect(Collectors.toList());
-            dto = new BlogListResponseDTO(blogDTOs, offset, limit, searchTitle);
+            if (!isValidOrderByField(orderBy)) {
+                status = Response.Status.BAD_REQUEST;
+                dto = new ErrorResponseDTO("Invalid orderBy field. Supported fields: createdAt, title, etc.");
+                isSuccess = false;
+            } else {
+                List<Blog> blogs = blogService.getAllBlogs(searchTitle, orderBy, limit, offset, asc);
+                List<BlogResponseDTO1> blogDTOs = blogs.stream()
+                        .map(BlogResponseDTO1::new)
+                        .collect(Collectors.toList());
+                long count = blogService.countAllBlogs(searchTitle, null);
+                dto = new BlogListResponseDTO(blogDTOs, offset, limit, searchTitle, count);
+            }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
             dto = new ErrorResponseDTO(e.getMessage());
@@ -83,16 +92,19 @@ public class BlogResource {
     public Response getFavoriteBlogsByUserId(@PathParam("userId") Long userId,
                                              @QueryParam("searchTitle") String searchTitle,
                                              @QueryParam("limit") @DefaultValue("10") int limit,
-                                             @QueryParam("offset") @DefaultValue("0") int offset) {
+                                             @QueryParam("offset") @DefaultValue("0") int offset,
+                                             @QueryParam("orderBy") @DefaultValue("createdAt") String orderBy,
+                                             @QueryParam("asc") @DefaultValue("true") boolean asc) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
         try {
-            List<Blog> blogs = blogService.getFavoriteBlogsByUserId(userId, searchTitle, limit, offset);
+            List<Blog> blogs = blogService.getFavoriteBlogsByUserId(userId, searchTitle,orderBy, limit, offset, asc);
             List<BlogResponseDTO1> blogDTOs = blogs.stream()
                     .map(BlogResponseDTO1::new)
                     .collect(Collectors.toList());
-            dto = new BlogListResponseDTO(blogDTOs, offset, limit, searchTitle);
+            long count = blogService.countAllBlogs(searchTitle, userId);
+            dto = new BlogListResponseDTO(blogDTOs, offset, limit, searchTitle, count);
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
             dto = new ErrorResponseDTO(e.getMessage());
@@ -112,10 +124,10 @@ public class BlogResource {
         boolean isSuccess = true;
         try {
             // Retrieve the User entity based on the userId from blogDTO
-            User user = userService.getUserById(blogDTO.getUserId());
+            User user = userService.getUserById(blogDTO.userId());
             if (user == null) {
                 status = Status.BAD_REQUEST;
-                dto = new ErrorResponseDTO("User with id " + blogDTO.getUserId() + " not found");
+                dto = new ErrorResponseDTO("User with id " + blogDTO.userId() + " not found");
                 isSuccess = false;
             } else {
                 var blog = blogDTO.toBlog(user);
@@ -135,7 +147,7 @@ public class BlogResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Update a blog by ID")
-    public Response updateBlog(@PathParam("id") Long id, BlogUpdateRequestDTO requestDTO) {
+    public Response updateBlog(@PathParam("id") Long id, @Valid BlogUpdateRequestDTO requestDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
@@ -173,7 +185,6 @@ public class BlogResource {
                 isSuccess = false;
             } else {
                 blogService.deleteBlog(blog);
-                dto = new BlogResponseDTO1(blog);
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
@@ -181,5 +192,10 @@ public class BlogResource {
             isSuccess = false;
         }
         return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+    }
+
+    private boolean isValidOrderByField(String field) {
+        List<String> validFields = List.of("id", "createdAt", "updatedAt", "title");
+        return validFields.contains(field);
     }
 }
