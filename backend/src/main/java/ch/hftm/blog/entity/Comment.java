@@ -1,7 +1,7 @@
 package ch.hftm.blog.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,7 +18,9 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
+    @NotBlank
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
 
     @Column(updatable = false)
