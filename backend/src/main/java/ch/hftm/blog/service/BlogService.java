@@ -1,6 +1,5 @@
 package ch.hftm.blog.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.hftm.blog.entity.Blog;
@@ -29,10 +28,11 @@ public class BlogService {
 
     public Blog getBlogById(Long id, boolean includeDetails) {
         Blog blog = blogRepository.findById(id);
-        if (includeDetails && blog != null) {
-            blog.setNumberOfLikes(blog.getLikes().size());
-            int commentSize = blog.getComments().size();
-            Log.info("Blog found with " + commentSize + " comments and " + blog.getNumberOfLikes() + ".");
+        if (blog != null) {
+            if (includeDetails) {
+                int commentSize = blog.getComments().size();
+                Log.info("Blog found with " + commentSize + " comments and " + blog.getNumberOfLikes() + ".");
+            }
         } else {
             Log.warn("No blog found with id " + id);
         }

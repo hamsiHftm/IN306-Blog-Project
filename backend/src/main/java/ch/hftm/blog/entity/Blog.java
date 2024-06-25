@@ -27,6 +27,8 @@ public class Blog {
     private String title;
 
     @NotBlank
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
 
     @Column(updatable = false)
@@ -65,5 +67,11 @@ public class Blog {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public long getNumberOfLikes() {
+        int size = likes.size();
+        setNumberOfLikes(size);
+        return size;
     }
 }
