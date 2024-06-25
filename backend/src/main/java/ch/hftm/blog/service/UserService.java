@@ -30,8 +30,12 @@ public class UserService {
 
     @Transactional
     public User updateUserName(User user, String firstName, String lastName) {
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
+        if (firstName != null && !firstName.isEmpty()) {
+            user.setFirstName(firstName);
+        }
+        if (lastName != null && !lastName.isEmpty()) {
+            user.setLastName(lastName);
+        }
         userRepository.persist(user);
         Log.info("Updated user " + user.getEmail());
         return user;

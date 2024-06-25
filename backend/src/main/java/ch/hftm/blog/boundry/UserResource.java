@@ -52,7 +52,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Login user")
-    public Response loginUser(UserLoginDTO userLoginDTO) {
+    public Response loginUser(@Valid UserLoginDTO userLoginDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
@@ -77,13 +77,13 @@ public class UserResource {
         return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
     }
 
-    @PUT
+    @PATCH
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     @Operation(summary = "Update user firstname and lastname by ID")
-    public Response updateUser(@PathParam("id") Long id, UserUpdateRequestDTO requestDTO) {
+    public Response updateUser(@PathParam("id") Long id, @Valid UserUpdateRequestDTO requestDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
@@ -136,7 +136,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     @Operation(summary = "Change user password by ID")
-    public Response changePassword(@PathParam("id") Long id, UserChangePasswordRequestDTO requestDTO) {
+    public Response changePassword(@PathParam("id") Long id, @Valid UserChangePasswordRequestDTO requestDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
