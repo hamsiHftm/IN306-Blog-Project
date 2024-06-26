@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"createdBlogs"})
 @Getter
 @Setter
 @Entity
@@ -27,8 +30,8 @@ public class User {
 
     private String lastName;
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-//    private List<Blog> createdBlogs = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Blog> createdBlogs = new ArrayList<>();
 
     // TODO profile pic as binary
 //    @Lob
