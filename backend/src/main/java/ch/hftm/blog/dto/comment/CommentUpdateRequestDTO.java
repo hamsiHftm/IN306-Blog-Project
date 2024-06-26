@@ -1,4 +1,8 @@
 package ch.hftm.blog.dto.comment;
 
-public record CommentUpdateRequestDTO(String content) {
+import jakarta.validation.constraints.NotBlank;
+
+public record CommentUpdateRequestDTO(
+        @NotBlank(message = "Content must not be null nor empty")
+        String content) {
 }

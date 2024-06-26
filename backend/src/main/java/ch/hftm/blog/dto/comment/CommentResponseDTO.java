@@ -12,8 +12,8 @@ public record CommentResponseDTO(
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         int numberOfLikes,
-        UserDetailResponseDTO userDetailResponseDTO,
-        BlogResponseDTO2 blogResponseDTO) {
+        UserDetailResponseDTO user,
+        BlogResponseDTO2 blog) {
 
     public CommentResponseDTO(Comment comment) {
         this(comment.getId(),

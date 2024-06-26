@@ -40,8 +40,8 @@ public class CommentResource {
         Object dto = null;
         boolean isSuccess = true;
         try {
-            User user = userService.getUserById(requestDTO.userID());
-            Blog blog = blogService.getBlogById(requestDTO.blogID(), false);
+            User user = userService.getUserById(requestDTO.userId());
+            Blog blog = blogService.findBlogById(requestDTO.blogId());
             if (user == null) {
                 status = Response.Status.NOT_FOUND;
                 dto = new ErrorResponseDTO("User not found");
@@ -69,7 +69,7 @@ public class CommentResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     @Operation(summary = "Update comment content by ID")
-    public Response updateComment(@PathParam("id") Long id, CommentUpdateRequestDTO requestDTO) {
+    public Response updateComment(@PathParam("id") Long id, @Valid CommentUpdateRequestDTO requestDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;

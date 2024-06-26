@@ -13,11 +13,11 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Getter
 @Setter
 @Entity
 @JsonIgnoreProperties(value = {"ratings", "likes"})
+@ToString(exclude = {"comments", "likes", "ratings"})
 public class Blog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,6 +62,7 @@ public class Blog {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate

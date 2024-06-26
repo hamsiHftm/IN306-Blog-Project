@@ -39,6 +39,10 @@ public class BlogService {
         return blog;
     }
 
+    public Blog findBlogById(Long id) {
+        return blogRepository.findById(id);
+    }
+
     public List<Blog> getFavoriteBlogsByUserId(Long userId, String searchTitle, String orderBy, int limit, int offset, boolean asc) {
         List<Blog> blogs = blogRepository.findFavoriteBlogsByUserId(userId, searchTitle, limit, offset, orderBy, asc);
         Log.info("Returning " + blogs.size() + " favorite blogs for user " + userId);
