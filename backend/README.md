@@ -8,55 +8,90 @@ This Blog Application is built using Quarkus and provides a simple REST API for 
 - **Manage users**: Users can register, login, and manage their accounts. 
 - **Comment on blog posts**: Users can comment on blog posts and view comments on each post. 
 - **Like blog posts**: Users can like blog posts to show appreciation or agreement with the content. 
-- **Reply to comments**: Users can reply to comments on blog posts, facilitating discussions and interactions. 
 - **Rate blog posts**: Users can rate blog posts based on their quality or relevance.
 
 ## Project Structure
 The project follows a standard Quarkus structure:
 
 ```
-├── java
-│   └── ch
-│       └── hftm
-│           └── blog
-│               ├── boundry
-│               │   ├── BlogResource.java
-│               │   └── CommentResource.java
-│               ├── entity
-│               │   ├── Blog.java
-│               │   ├── BlogLike.java
-│               │   ├── Comment.java
-│               │   ├── CommentLike.java
-│               │   ├── Rating.java
-│               │   └── User.java
-│               ├── repository
-│               │   ├── BlogLikeRepository.java
-│               │   ├── BlogRepository.java
-│               │   ├── CommentLikeRepository.java
-│               │   ├── CommentRepository.java
-│               │   ├── RatingRepository.java
-│               │   └── UserRepository.java
-│               └── service
-│                   ├── BlogService.java
-│                   ├── CommentService.java
-│                   └── UserService.java
+└── java
+    └── ch
+        └── hftm
+            └── blog
+                ├── boundary
+                │   ├── BlogLikeResource.java            // REST resource for handling blog likes
+                │   ├── BlogResource.java                // REST resource for handling blogs
+                │   ├── CommentLikeResource.java         // REST resource for handling comment likes
+                │   ├── CommentResource.java             // REST resource for handling comments
+                │   ├── RatingResource.java              // REST resource for handling ratings
+                │   └── UserResource.java                // REST resource for handling users
+                ├── dto
+                │   ├── ErrorResponseDTO1.java            // DTO for error responses
+                │   ├── ResponseDTO1.java                 // Generic DTO for response handling
+                │   ├── blog
+                │   │   ├── BlogCreateRequestDTO1.java     // Request DTO for creating a blog
+                │   │   ├── BlogDetailResponseDTO1.java    // Response DTO for detailed blog response, which includes comments
+                │   │   ├── BlogListResponseDTO1.java      // Response DTO for listing blogs
+                │   │   ├── BlogResponseDTO1.java          // Base DTO for blog responses, which includes numberOfLikes and user info
+                │   │   ├── BlogResponseDTO2.java          // DTO for blog responses, which has only title and id for simple lookup
+                │   │   └── BlogUpdateRequestDTO1.java     // Request DTO for updating a blog
+                │   ├── comment
+                │   │   ├── CommentCreateRequestDTO1.java  // Request DTO for creating a comment
+                │   │   ├── CommentResponseDTO1.java       // Base DTO for comment responses, with blog info
+                │   │   ├── CommentResponseDTO2.java       // Additional DTO for comment responses, without blog info
+                │   │   └── CommentUpdateRequestDTO1.java  // Request DTO for updating a comment
+                │   ├── rating
+                │   │   └── RatingResponseDTO1.java         // DTO for rating responses
+                │   └── user
+                │       ├── UserChangePasswordRequestDTO1.java  // Request DTO for changing user password
+                │       ├── UserCreateRequestDTO1.java          // Request DTO for creating a user
+                │       ├── UserDetailResponseDTO1.java         // Response DTO for detailed user response
+                │       ├── UserLoginDTO1.java                  // Request DTO for user login
+                │       └── UserUpdateRequestDTO1.java          // Request DTO for updating a user
+                ├── entity
+                │   ├── Blog.java                        // Entity class for blogs
+                │   ├── BlogLike.java                    // Entity class for blog likes
+                │   ├── Comment.java                     // Entity class for comments
+                │   ├── CommentLike.java                 // Entity class for comment likes
+                │   ├── Rating.java                      // Entity class for ratings
+                │   └── User.java                        // Entity class for users
+                ├── repository
+                │   ├── BlogLikeRepository.java          // Repository interface for blog likes
+                │   ├── BlogRepository.java              // Repository interface for blogs
+                │   ├── CommentLikeRepository.java       // Repository interface for comment likes
+                │   ├── CommentRepository.java           // Repository interface for comments
+                │   ├── RatingRepository.java            // Repository interface for ratings
+                │   └── UserRepository.java              // Repository interface for users
+                └── service
+                    ├── BlogLikeService.java             // Service class for blog like operations
+                    ├── BlogService.java                 // Service class for blog operations
+                    ├── CommentLikeService.java          // Service class for comment like operations
+                    ├── CommentService.java              // Service class for comment operations
+                    ├── RatingService.java               // Service class for rating operations
+                    └── UserService.java                 // Service class for user operations
+                    
 └── resources
-    └── application.properties
-    
-
-└── resources
-    ├── Blog.sql
-    ├── Blog.drawio.png
-    ├── User.sql
-    └── in306-blog.yaml
-
+    ├── Blog.drawio.png        // Diagram or image related to blogs (assuming it's a diagram of some sort)
+    └── data_query
+        ├── Blog.sql           // SQL script for blog-related data
+        ├── BlogLike.sql       // SQL script for blog like-related data
+        ├── Comment.sql        // SQL script for comment-related data
+        ├── CommentLike.sql    // SQL script for comment like-related data
+        ├── Rating.sql         // SQL script for rating-related data
+        └── User.sql           // SQL script for user-related data
 ```
-- **boundary**: Contains REST resource classes responsible for handling HTTP requests.
-- **dto**: TODO
-- **service**: Service class containing business logic for blogs operations.
-- **repository**: Repository class for database operations.
-- **entity**: Entity class representing various components of this application.
-- **application.properties**: Configuration file for database and other settings.
+- **boundary**: Contains REST resource classes (*Resource.java) that handle HTTP requests related to different components of the blog application (blogs, comments, likes, ratings, users).
+- **dto**: Contains DTO (Data Transfer Object) classes (*DTO.java) used for representing data in API requests and responses.
+  - Subpackages (blog, comment, rating, user) organize DTOs based on the entity they represent.
+- **service**: Contains service classes (*Service.java) that encapsulate business logic for respective entities (blogs, comments, likes, ratings, users).
+- **repository**: Contains repository interfaces (*Repository.java) that define methods for interacting with the database for each entity.
+- **entity**: Contains entity classes (*.java) that represent data objects stored in the database.
+- **application.properties**: Configuration file for application settings, including database connection details.
+
+
+- **resources**: Directory for non-Java resources. 
+  - **Blog.drawio.png**: Diagram or image related to blogs (assuming it's a diagram of some sort).
+  - **data_query**: Directory containing SQL scripts (*.sql) for database operations related to blogs, comments, likes, ratings, and users.
 
 ## Entity classes
 ![class diagramm](../resources/Blog.drawio.png)
@@ -68,7 +103,14 @@ The project follows a standard Quarkus structure:
 - **Rating:** Stores numeric ratings (e.g., 1-5 stars) given by users to blog posts.
 
 ## Response Schema
-TODO
+The application follows a consistent response schema for handling HTTP responses:
+- ResponseDTO1: A generic response DTO containing:
+  - isSuccess: Boolean indicating the success or failure of the operation. 
+  - data: Object containing the response data. In case of success, it contains the corresponding DTO (e.g., BlogResponseDTO, CommentResponseDTO). In case of an error, it contains an instance of ErrorResponseDTO1.
+
+### ErrorResponseDTO1
+- ErrorResponseDTO1:
+  - errorMsg: String containing an error message describing the reason for the failure.
 
 ## How to Start the Project
 
@@ -84,7 +126,11 @@ TODO
    ```
 
 2. **Configure the Database**:
-TODO
+   The application.properties file in your project includes all the necessary configurations to set up the database for the Blog Application. Ensure to replace the volume path with your preferred external location to prevent data loss:
+   ```sh
+   quarkus.datasource.devservices.volumes."{your-volume-path-for-db}"=/var/lib/mysql
+   ```
+   To prevent data loss during development, it's essential to specify an external volume path (quarkus.datasource.devservices.volumes) in application.properties. This ensures that the MySQL database data is stored outside the Docker container.
 
 
 3. **Run the Application**:
@@ -105,7 +151,6 @@ TODO
 6. **Entity**: I tried adding a new entity, but it didn't work. I need help fixing this or removing the entity entirely.
 7. **Entities**: All entity classes have been added for the project. 
 8. **OpenAPI**: An OpenAPI specification has been added to the resources folder, but it is not yet complete. Due to time constraints, I was unable to finish it.
-This README provides a comprehensive overview of the blog application, including its functionality, project structure, additional classes, ideas for future enhancements, and instructions for setting up and running the application.
 9. **Blog HTTP requests**: Implemented PUT, POST, GET, and DELETE routes for the Blog entity.
 10. **Error-Response**: Added thorough error handling in the way responses are managed.
 11. **Validation**: Validation added for entities.
