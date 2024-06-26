@@ -27,18 +27,18 @@ public class BlogLikeResource {
     UserService userService;
 
     @POST
-    @Path("/{userID}/{blogID}")
+    @Path("/{userId}/{blogId}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     @Operation(summary = "Add like to blog by a user")
-    public Response addLikeToBlog(@PathParam("userID") long userID,
-                                  @PathParam("blogID") long blogID) {
+    public Response addLikeToBlog(@PathParam("userId") long userId,
+                                  @PathParam("blogId") long blogId) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
         try {
-            User user = userService.getUserById(userID);
-            Blog blog = blogService.findBlogById(blogID);
+            User user = userService.getUserById(userId);
+            Blog blog = blogService.findBlogById(blogId);
             if (user == null) {
                 status = Response.Status.NOT_FOUND;
                 dto = new ErrorResponseDTO("User not found");
@@ -59,18 +59,18 @@ public class BlogLikeResource {
     }
 
     @DELETE
-    @Path("/{userID}/{blogID}")
+    @Path("/{userId}/{blogId}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     @Operation(summary = "Remove like from blog by a user")
-    public Response RemoveLikeToBlog(@PathParam("userID") Long userID,
-                                     @PathParam("blogID") Long blogID) {
+    public Response removeLikeToBlog(@PathParam("userId") Long userId,
+                                     @PathParam("blogId") Long blogId) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
         try {
-            User user = userService.getUserById(userID);
-            Blog blog = blogService.findBlogById(blogID);
+            User user = userService.getUserById(userId);
+            Blog blog = blogService.findBlogById(blogId);
             if (user == null) {
                 status = Response.Status.NOT_FOUND;
                 dto = new ErrorResponseDTO("User not found");
@@ -80,7 +80,7 @@ public class BlogLikeResource {
                 dto = new ErrorResponseDTO("Blog not found");
                 isSuccess = false;
             } else {
-                BlogLike blogLike = blogLikeService.getBlogLikeByBlogAndUserID(blogID, userID);
+                BlogLike blogLike = blogLikeService.getBlogLikeByBlogAndUserID(blogId, userId);
                 blogLikeService.removeLikeToBlog(blogLike);
             }
         } catch (Exception e) {

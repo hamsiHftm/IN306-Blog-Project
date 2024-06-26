@@ -9,7 +9,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"createdBlogs"})
+@ToString(exclude = {"createdBlogs", "createdComments"})
 @Getter
 @Setter
 @Entity
@@ -32,6 +32,11 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Blog> createdBlogs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Comment> createdComments = new ArrayList<>();
+
+    // Maybe add list of blogLike and comment like when needed...
 
     // TODO profile pic as binary
 //    @Lob

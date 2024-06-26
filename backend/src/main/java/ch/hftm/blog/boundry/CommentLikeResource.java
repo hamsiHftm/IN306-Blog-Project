@@ -27,18 +27,18 @@ public class CommentLikeResource {
     UserService userService;
 
     @POST
-    @Path("/{userID}/{commentID}")
+    @Path("/{userId}/{commentId}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     @Operation(summary = "Add like to comment by a user")
-    public Response addLikeToComment(@PathParam("userID") long userID,
-                                  @PathParam("commentID") long commentID) {
+    public Response addLikeToComment(@PathParam("userId") long userId,
+                                  @PathParam("commentId") long commentId) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
         try {
-            User user = userService.getUserById(userID);
-            Comment comment = commentService.getCommentById(commentID);
+            User user = userService.getUserById(userId);
+            Comment comment = commentService.getCommentById(commentId);
             if (user == null) {
                 status = Response.Status.NOT_FOUND;
                 dto = new ErrorResponseDTO("User not found");
@@ -59,18 +59,18 @@ public class CommentLikeResource {
     }
 
     @DELETE
-    @Path("/{userID}/{commentID}")
+    @Path("/{userId}/{commentId}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     @Operation(summary = "Remove like from comment by a user")
-    public Response RemoveLikeToComment(@PathParam("userID") long userID,
-                                     @PathParam("commentID") long commentID) {
+    public Response removeLikeToComment(@PathParam("userId") long userId,
+                                     @PathParam("commentId") long commentId) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
         try {
-            User user = userService.getUserById(userID);
-            Comment comment = commentService.getCommentById(commentID);
+            User user = userService.getUserById(userId);
+            Comment comment = commentService.getCommentById(commentId);
             if (user == null) {
                 status = Response.Status.NOT_FOUND;
                 dto = new ErrorResponseDTO("User not found");
@@ -80,7 +80,7 @@ public class CommentLikeResource {
                 dto = new ErrorResponseDTO("Comment not found");
                 isSuccess = false;
             } else {
-                CommentLike commentLike = commentLikeService.getCommentLikeByCommentAndUserID(commentID, userID);
+                CommentLike commentLike = commentLikeService.getCommentLikeByCommentAndUserID(commentId, userId);
                 commentLikeService.removeLikeToComment(commentLike);
             }
         } catch (Exception e) {
