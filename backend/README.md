@@ -45,13 +45,14 @@ The project follows a standard Quarkus structure:
     
 
 └── resources
-    ├── Blog Insert.sql
+    ├── Blog.sql
     ├── Blog.drawio.png
-    ├── User Insert.sql
+    ├── User.sql
     └── in306-blog.yaml
 
 ```
 - **boundary**: Contains REST resource classes responsible for handling HTTP requests.
+- **dto**: TODO
 - **service**: Service class containing business logic for blogs operations.
 - **repository**: Repository class for database operations.
 - **entity**: Entity class representing various components of this application.
@@ -65,6 +66,9 @@ The project follows a standard Quarkus structure:
 - **Like:** Tracks likes on blog posts by users.
 - **CommentLikes:** Tracks likes on comments by users.
 - **Rating:** Stores numeric ratings (e.g., 1-5 stars) given by users to blog posts.
+
+## Response Schema
+TODO
 
 ## How to Start the Project
 
@@ -112,3 +116,5 @@ This README provides a comprehensive overview of the blog application, including
 16. **User HTTP requests**: Http Route fully implemented for user model with schema
 17. **Blog HTTP requests**: Http Route fully implemented for blog model with schema
 18. **Comment HTTP requests**: Http Route fully implemented for comment model with schema
+19. **Blog HTTP requests**: Http Route fully implemented for blogLike model with schema
+20. 

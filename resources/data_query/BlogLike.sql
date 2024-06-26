@@ -151,4 +151,6 @@ FROM (SELECT id FROM User ORDER BY RAND() LIMIT 18) AS subquery25
 WHERE id NOT IN (SELECT user_id FROM BlogLike WHERE blog_id = 25);
 
 
-SELECT * FROM Bloglike;
+SELECT * FROM Bloglike order by blog_id, user_id asc;
+
+DELETE FROM BlogLike where id in (731, 732)

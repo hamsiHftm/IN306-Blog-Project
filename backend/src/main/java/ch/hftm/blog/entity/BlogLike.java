@@ -9,6 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"blog_id", "user_id"})})
 public class BlogLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
