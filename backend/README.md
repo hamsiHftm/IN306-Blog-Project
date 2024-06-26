@@ -116,5 +116,5 @@ This README provides a comprehensive overview of the blog application, including
 16. **User HTTP requests**: Http Route fully implemented for user model with schema
 17. **Blog HTTP requests**: Http Route fully implemented for blog model with schema
 18. **Comment HTTP requests**: Http Route fully implemented for comment model with schema
-19. **Blog HTTP requests**: Http Route fully implemented for blogLike model with schema
-20. 
+19. **BlogLike HTTP requests**: Http Route fully implemented for blogLike model with schema
+20. **CommentLike HTTP requests**: Http Route fully implemented for commentLike model with schema
