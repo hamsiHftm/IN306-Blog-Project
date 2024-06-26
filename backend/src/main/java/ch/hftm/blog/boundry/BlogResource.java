@@ -1,8 +1,8 @@
 package ch.hftm.blog.boundry;
 
-import ch.hftm.blog.dto.ResponseDTO;
+import ch.hftm.blog.dto.ResponseDTO1;
 import ch.hftm.blog.dto.blog.*;
-import ch.hftm.blog.dto.ErrorResponseDTO;
+import ch.hftm.blog.dto.ErrorResponseDTO1;
 import ch.hftm.blog.entity.Blog;
 import ch.hftm.blog.entity.User;
 import ch.hftm.blog.service.BlogService;
@@ -42,7 +42,7 @@ public class BlogResource {
         try {
             if (!isValidOrderByField(orderBy)) {
                 status = Response.Status.BAD_REQUEST;
-                dto = new ErrorResponseDTO("Invalid orderBy field. Supported fields: createdAt, title, etc.");
+                dto = new ErrorResponseDTO1("Invalid orderBy field. Supported fields: createdAt, title, etc.");
                 isSuccess = false;
             } else {
                 List<Blog> blogs = blogService.getAllBlogs(searchTitle, orderBy, limit, offset, asc);
@@ -50,14 +50,14 @@ public class BlogResource {
                         .map(BlogResponseDTO1::new)
                         .collect(Collectors.toList());
                 long count = blogService.countAllBlogs(searchTitle, null);
-                dto = new BlogListResponseDTO(blogDTOs, offset, limit, searchTitle, count);
+                dto = new BlogListResponseDTO1(blogDTOs, offset, limit, searchTitle, count);
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
     @GET
@@ -72,17 +72,17 @@ public class BlogResource {
             Blog blog = blogService.getBlogById(id, true);
             if (blog == null) {
                 status = Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("Blog not found");
+                dto = new ErrorResponseDTO1("Blog not found");
                 isSuccess = false;
             } else {
-                dto = new BlogDetailResponseDTO(blog);
+                dto = new BlogDetailResponseDTO1(blog);
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
     @GET
@@ -104,13 +104,13 @@ public class BlogResource {
                     .map(BlogResponseDTO1::new)
                     .collect(Collectors.toList());
             long count = blogService.countAllBlogs(searchTitle, userId);
-            dto = new BlogListResponseDTO(blogDTOs, offset, limit, searchTitle, count);
+            dto = new BlogListResponseDTO1(blogDTOs, offset, limit, searchTitle, count);
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
     @POST
@@ -118,7 +118,7 @@ public class BlogResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     @Operation(summary = "Add a new blog")
-    public Response addBlog(@Valid BlogCreateRequestDTO blogDTO) {
+    public Response addBlog(@Valid BlogCreateRequestDTO1 blogDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
@@ -127,7 +127,7 @@ public class BlogResource {
             User user = userService.getUserById(blogDTO.userId());
             if (user == null) {
                 status = Status.BAD_REQUEST;
-                dto = new ErrorResponseDTO("User with id " + blogDTO.userId() + " not found");
+                dto = new ErrorResponseDTO1("User with id " + blogDTO.userId() + " not found");
                 isSuccess = false;
             } else {
                 var blog = blogDTO.toBlog(user);
@@ -136,10 +136,10 @@ public class BlogResource {
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
     @PATCH
@@ -147,7 +147,7 @@ public class BlogResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Update a blog by ID")
-    public Response updateBlog(@PathParam("id") Long id, @Valid BlogUpdateRequestDTO requestDTO) {
+    public Response updateBlog(@PathParam("id") Long id, @Valid BlogUpdateRequestDTO1 requestDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
@@ -155,7 +155,7 @@ public class BlogResource {
             Blog foundBlog = blogService.getBlogById(id, false);
             if (foundBlog == null) {
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("Blog not found");
+                dto = new ErrorResponseDTO1("Blog not found");
                 isSuccess = false;
             } else {
                 blogService.updateBlog(foundBlog, requestDTO.title(), requestDTO.content());
@@ -163,10 +163,10 @@ public class BlogResource {
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
     @DELETE
@@ -181,17 +181,17 @@ public class BlogResource {
             Blog blog = blogService.getBlogById(id, false);
             if (blog == null) {
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("Blog not found");
+                dto = new ErrorResponseDTO1("Blog not found");
                 isSuccess = false;
             } else {
                 blogService.deleteBlog(blog);
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
     private boolean isValidOrderByField(String field) {

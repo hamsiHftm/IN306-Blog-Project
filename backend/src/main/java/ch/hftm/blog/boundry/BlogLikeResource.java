@@ -1,7 +1,7 @@
 package ch.hftm.blog.boundry;
 
-import ch.hftm.blog.dto.ErrorResponseDTO;
-import ch.hftm.blog.dto.ResponseDTO;
+import ch.hftm.blog.dto.ErrorResponseDTO1;
+import ch.hftm.blog.dto.ResponseDTO1;
 import ch.hftm.blog.entity.Blog;
 import ch.hftm.blog.entity.BlogLike;
 import ch.hftm.blog.entity.User;
@@ -41,21 +41,21 @@ public class BlogLikeResource {
             Blog blog = blogService.findBlogById(blogId);
             if (user == null) {
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("User not found");
+                dto = new ErrorResponseDTO1("User not found");
                 isSuccess = false;
             } else if (blog == null){
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("Blog not found");
+                dto = new ErrorResponseDTO1("Blog not found");
                 isSuccess = false;
             } else {
                 blogLikeService.addLikeToBlog(blog, user);
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
     @DELETE
@@ -73,11 +73,11 @@ public class BlogLikeResource {
             Blog blog = blogService.findBlogById(blogId);
             if (user == null) {
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("User not found");
+                dto = new ErrorResponseDTO1("User not found");
                 isSuccess = false;
             } else if (blog == null){
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("Blog not found");
+                dto = new ErrorResponseDTO1("Blog not found");
                 isSuccess = false;
             } else {
                 BlogLike blogLike = blogLikeService.getBlogLikeByBlogAndUserID(blogId, userId);
@@ -85,9 +85,9 @@ public class BlogLikeResource {
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 }

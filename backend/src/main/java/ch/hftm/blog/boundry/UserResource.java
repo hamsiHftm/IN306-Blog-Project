@@ -1,7 +1,7 @@
 package ch.hftm.blog.boundry;
 
-import ch.hftm.blog.dto.ErrorResponseDTO;
-import ch.hftm.blog.dto.ResponseDTO;
+import ch.hftm.blog.dto.ErrorResponseDTO1;
+import ch.hftm.blog.dto.ResponseDTO1;
 import ch.hftm.blog.dto.user.*;
 import ch.hftm.blog.entity.User;
 import ch.hftm.blog.service.UserService;
@@ -13,8 +13,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 
-import java.util.Objects;
-
 @Path("user")
 public class UserResource {
     @Inject
@@ -25,7 +23,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     @Operation(summary = "Create new user")
-    public Response createUser(@Valid UserCreateRequestDTO requestDTO) {
+    public Response createUser(@Valid UserCreateRequestDTO1 requestDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
@@ -33,18 +31,18 @@ public class UserResource {
             User foundUser = userService.getUserByEmail(requestDTO.email());
             if (foundUser != null) {
                 status = Response.Status.BAD_REQUEST;
-                dto = new ErrorResponseDTO("User already exists");
+                dto = new ErrorResponseDTO1("User already exists");
                 isSuccess = false;
             } else {
                 User createdUser = userService.createUser(requestDTO.toUser());
-                dto = new UserDetailResponseDTO(createdUser);
+                dto = new UserDetailResponseDTO1(createdUser);
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
     @POST
@@ -52,7 +50,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Login user")
-    public Response loginUser(@Valid UserLoginDTO userLoginDTO) {
+    public Response loginUser(@Valid UserLoginDTO1 userLoginDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
@@ -60,21 +58,21 @@ public class UserResource {
             User user = userService.getUserByEmail(userLoginDTO.email());
             if (user == null) {
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("User not found with email");
+                dto = new ErrorResponseDTO1("User not found with email");
                 isSuccess = false;
             } else if (!user.getPassword().equals(userLoginDTO.password())) {
                 status = Response.Status.FORBIDDEN;
-                dto = new ErrorResponseDTO("Wrong password");
+                dto = new ErrorResponseDTO1("Wrong password");
                 isSuccess = false;
             } else {
-                dto = new UserDetailResponseDTO(user);
+                dto = new UserDetailResponseDTO1(user);
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
     @PATCH
@@ -83,7 +81,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     @Operation(summary = "Update user firstname and lastname by ID")
-    public Response updateUser(@PathParam("id") Long id, @Valid UserUpdateRequestDTO requestDTO) {
+    public Response updateUser(@PathParam("id") Long id, @Valid UserUpdateRequestDTO1 requestDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
@@ -91,18 +89,18 @@ public class UserResource {
             User foundUser = userService.getUserById(id);
             if (foundUser == null) {
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("User not found with id");
+                dto = new ErrorResponseDTO1("User not found with id");
                 isSuccess = false;
             } else {
                 User user = userService.updateUserName(foundUser, requestDTO.firstname(), requestDTO.lastname());
-                dto = new UserDetailResponseDTO(user);
+                dto = new UserDetailResponseDTO1(user);
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
     @DELETE
@@ -117,17 +115,17 @@ public class UserResource {
             User user = userService.getUserById(id);
             if (user == null) {
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("User not found");
+                dto = new ErrorResponseDTO1("User not found");
                 isSuccess = false;
             } else {
                 userService.deleteUser(user);
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
     @PATCH
@@ -136,7 +134,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     @Operation(summary = "Change user password by ID")
-    public Response changePassword(@PathParam("id") Long id, @Valid UserChangePasswordRequestDTO requestDTO) {
+    public Response changePassword(@PathParam("id") Long id, @Valid UserChangePasswordRequestDTO1 requestDTO) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
         boolean isSuccess = true;
@@ -144,20 +142,20 @@ public class UserResource {
             User foundUser = userService.getUserById(id);
             if (foundUser == null) {
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("User not found with id");
+                dto = new ErrorResponseDTO1("User not found with id");
                 isSuccess = false;
             } else if (!foundUser.getPassword().equals(requestDTO.confirmPassword())) {
                 status = Response.Status.FORBIDDEN;
-                dto = new ErrorResponseDTO("Wrong password");
+                dto = new ErrorResponseDTO1("Wrong password");
                 isSuccess = false;
             } else {
                 User user = userService.changePassword(foundUser, requestDTO.newPassword());
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 }

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record BlogCreateRequestDTO(
+public record BlogCreateRequestDTO1(
         @NotBlank(message = "Title must not be null")
         @Size(min=5, message = "Title must contain at least 5 characters")
         String title,

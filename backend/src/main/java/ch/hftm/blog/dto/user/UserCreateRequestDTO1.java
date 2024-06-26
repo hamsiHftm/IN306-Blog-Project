@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record UserCreateRequestDTO(
+public record UserCreateRequestDTO1(
         String firstName,
         String lastName,
         @NotBlank(message = "Email must not be null nor blank nor empty")

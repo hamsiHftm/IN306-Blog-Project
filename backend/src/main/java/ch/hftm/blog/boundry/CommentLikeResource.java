@@ -1,7 +1,7 @@
 package ch.hftm.blog.boundry;
 
-import ch.hftm.blog.dto.ErrorResponseDTO;
-import ch.hftm.blog.dto.ResponseDTO;
+import ch.hftm.blog.dto.ErrorResponseDTO1;
+import ch.hftm.blog.dto.ResponseDTO1;
 import ch.hftm.blog.entity.Comment;
 import ch.hftm.blog.entity.CommentLike;
 import ch.hftm.blog.entity.User;
@@ -41,21 +41,21 @@ public class CommentLikeResource {
             Comment comment = commentService.getCommentById(commentId);
             if (user == null) {
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("User not found");
+                dto = new ErrorResponseDTO1("User not found");
                 isSuccess = false;
             } else if (comment == null){
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("Comment not found");
+                dto = new ErrorResponseDTO1("Comment not found");
                 isSuccess = false;
             } else {
                 commentLikeService.addLikeToComment(comment, user);
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
     @DELETE
@@ -73,11 +73,11 @@ public class CommentLikeResource {
             Comment comment = commentService.getCommentById(commentId);
             if (user == null) {
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("User not found");
+                dto = new ErrorResponseDTO1("User not found");
                 isSuccess = false;
             } else if (comment == null){
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("Comment not found");
+                dto = new ErrorResponseDTO1("Comment not found");
                 isSuccess = false;
             } else {
                 CommentLike commentLike = commentLikeService.getCommentLikeByCommentAndUserID(commentId, userId);
@@ -85,9 +85,9 @@ public class CommentLikeResource {
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 }

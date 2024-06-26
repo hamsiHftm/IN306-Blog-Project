@@ -6,7 +6,7 @@ import ch.hftm.blog.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CommentCreateRequestDTO(
+public record CommentCreateRequestDTO1(
         @NotBlank(message = "Content must not be blank or null")
         String content,
         @NotNull(message = "Blog-Id must not be null")

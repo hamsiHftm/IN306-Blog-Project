@@ -1,8 +1,8 @@
 package ch.hftm.blog.boundry;
 
-import ch.hftm.blog.dto.ErrorResponseDTO;
-import ch.hftm.blog.dto.ResponseDTO;
-import ch.hftm.blog.dto.rating.RatingResponseDTO;
+import ch.hftm.blog.dto.ErrorResponseDTO1;
+import ch.hftm.blog.dto.ResponseDTO1;
+import ch.hftm.blog.dto.rating.RatingResponseDTO1;
 import ch.hftm.blog.entity.*;
 import ch.hftm.blog.service.BlogService;
 import ch.hftm.blog.service.RatingService;
@@ -43,11 +43,11 @@ public class RatingResource {
             Blog blog = blogService.findBlogById(blogId);
             if (user == null) {
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("User not found");
+                dto = new ErrorResponseDTO1("User not found");
                 isSuccess = false;
             } else if (blog == null){
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("Blog not found");
+                dto = new ErrorResponseDTO1("Blog not found");
                 isSuccess = false;
             } else {
                 Rating rating = new Rating(ratingNr, blog, user);
@@ -55,10 +55,10 @@ public class RatingResource {
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
     @DELETE
@@ -76,17 +76,17 @@ public class RatingResource {
             Blog blog = blogService.findBlogById(blogId);
             if (user == null) {
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("User not found");
+                dto = new ErrorResponseDTO1("User not found");
                 isSuccess = false;
             } else if (blog == null){
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("Blog not found");
+                dto = new ErrorResponseDTO1("Blog not found");
                 isSuccess = false;
             } else {
                 Rating rating = ratingService.getRatingWithBlogAndUserID(blog, user);
                 if (rating == null) {
                     status = Response.Status.NOT_FOUND;
-                    dto = new ErrorResponseDTO("Rating not found");
+                    dto = new ErrorResponseDTO1("Rating not found");
                     isSuccess = false;
                 } else {
                     ratingService.removeRating(rating);
@@ -94,10 +94,10 @@ public class RatingResource {
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
 
@@ -117,17 +117,17 @@ public class RatingResource {
             Blog blog = blogService.findBlogById(blogId);
             if (user == null) {
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("User not found");
+                dto = new ErrorResponseDTO1("User not found");
                 isSuccess = false;
             } else if (blog == null){
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("Blog not found");
+                dto = new ErrorResponseDTO1("Blog not found");
                 isSuccess = false;
             } else {
                 Rating rating = ratingService.getRatingWithBlogAndUserID(blog, user);
                 if (rating == null) {
                     status = Response.Status.NOT_FOUND;
-                    dto = new ErrorResponseDTO("Rating not found");
+                    dto = new ErrorResponseDTO1("Rating not found");
                     isSuccess = false;
                 } else {
                     rating.setRating(ratingNr);
@@ -136,10 +136,10 @@ public class RatingResource {
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
     @GET
@@ -155,18 +155,18 @@ public class RatingResource {
             Blog blog = blogService.findBlogById(blogId);
             if (blog == null){
                 status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO("Blog not found");
+                dto = new ErrorResponseDTO1("Blog not found");
                 isSuccess = false;
             } else {
                 double average = ratingService.getAverageRating(blog);
-                dto = new RatingResponseDTO(blog, average);
+                dto = new RatingResponseDTO1(blog, average);
             }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO(e.getMessage());
+            dto = new ErrorResponseDTO1(e.getMessage());
             isSuccess = false;
         }
-        return Response.status(status).entity(new ResponseDTO(isSuccess, dto)).build();
+        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
 }
