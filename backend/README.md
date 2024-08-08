@@ -10,6 +10,30 @@ This Blog Application is built using Quarkus and provides a simple REST API for 
 - **Like blog posts**: Users can like blog posts to show appreciation or agreement with the content. 
 - **Rate blog posts**: Users can rate blog posts based on their quality or relevance.
 
+## Roles and Permissions
+
+1. **Guest (Not Logged In)**:
+    - **Access**: Read-only access to view blog posts and comments.
+    - **Actions**: Can view blog posts and comments but cannot interact (create, edit, or delete) with the content or use features like rating and liking.
+
+2. **Registered User (Logged In)**:
+    - **Access**: Full access to their own content (blogs, comments) and interactive features.
+    - **Actions**:
+        - Can register, log in, and manage their account.
+        - Can create, edit, and delete their own blog posts and comments.
+        - Can like, dislike, and rate blog posts.
+        - Can delete their account.
+    - **Role Assignment**: When a user creates an account, they are automatically assigned the "Registered User" role.
+
+3. **Admin**:
+    - **Access**: Full control over the system, including all users and content.
+    - **Actions**:
+        - Can manage all users (e.g., delete accounts, assign roles).
+        - Can edit or delete any content (posts, comments).
+        - Has administrative control to ensure proper maintenance and support.
+    - **Role Management**: Other admins can assign the "Admin" role to a registered user. The system always maintains at least one admin account to ensure continued oversight and management.
+
+
 ## Project Structure
 The project follows a standard Quarkus structure:
 
