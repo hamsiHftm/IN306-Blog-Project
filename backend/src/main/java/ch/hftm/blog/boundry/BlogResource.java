@@ -7,6 +7,7 @@ import ch.hftm.blog.entity.Blog;
 import ch.hftm.blog.entity.User;
 import ch.hftm.blog.service.BlogService;
 import ch.hftm.blog.service.UserService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -29,6 +30,8 @@ public class BlogResource {
     UserService userService;
 
     @GET
+    @Path("public")
+    @RolesAllowed("quest")
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Get all blogs with pagination and search")
     public Response getAllBlogs(@QueryParam("searchTitle") String searchTitle,
@@ -61,9 +64,10 @@ public class BlogResource {
     }
 
     @GET
-    @Path("{id}")
+    @Path("/public/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Get blog by ID")
+    @RolesAllowed("quest")
     public Response getBlogById(@PathParam("id") Long id) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
@@ -87,6 +91,7 @@ public class BlogResource {
 
     @GET
     @Path("favourites/{userId}")
+    @RolesAllowed("registered_user")
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Get favorite blogs by user ID with pagination and search")
     public Response getFavoriteBlogsByUserId(@PathParam("userId") Long userId,
@@ -114,6 +119,7 @@ public class BlogResource {
     }
 
     @POST
+    @RolesAllowed("registered_user")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
@@ -144,6 +150,7 @@ public class BlogResource {
 
     @PATCH
     @Path("{id}")
+    @RolesAllowed("registered_user")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Update a blog by ID")
@@ -171,6 +178,7 @@ public class BlogResource {
 
     @DELETE
     @Path("{id}")
+    @RolesAllowed("registered_user")
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Delete a blog by ID")
     public Response deleteBlog(@PathParam("id") Long id) {

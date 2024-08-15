@@ -15,8 +15,8 @@ public class BlogServiceTest {
     @Inject
     BlogService blogService;
 
-    @Test
-    void listingAndAddingBlogs() {
+//    @Test
+//    void listingAndAddingBlogs() {
         // Arrange
 //        Blog blog = new Blog("Testing Blog", "This is my testing blog");
 //        int blogsBefore;
@@ -30,5 +30,5 @@ public class BlogServiceTest {
 //        // Assert
 //        assertEquals(blogsBefore + 1, blogs.size());
 //        assertEquals(blog, blogs.get(blogs.size() - 1));
-    }
+//    }
 }
