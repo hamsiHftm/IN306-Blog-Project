@@ -143,6 +143,15 @@ The application follows a consistent response schema for handling HTTP responses
 - Make sure you have Maven installed.
 
 ### Steps to Start the Project
+
+#### Keycloak - IN306-Blog
+(TODO)
+1. **Docker Container**
+2. **Set-up IN306-Blog realm**
+3. **Create Roles**
+4. **Create Admin User**
+
+#### Blog - Backend Component
 1. **Clone the Repository**:
    ```sh
    git clone https://github.com/hamsiHftm/IN306-Blog-Project.git
