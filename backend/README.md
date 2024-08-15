@@ -242,4 +242,6 @@ The application follows a consistent response schema for handling HTTP responses
 19. **BlogLike HTTP requests**: Http Route fully implemented for blogLike model with schema
 20. **CommentLike HTTP requests**: Http Route fully implemented for commentLike model with schema
 21. **Rating HTTP requests**: Http Route fully implemented for rating model with schema
-22. **KeyCloak Integration**: It's not working, still having issues creating roles. I dont understand what the attributes and description with placeholder. In Dev UI, the Keycloak Admin is not displaying. 
+22. **KeyCloak Integration**: Keycloak integration is not working. I am still having issues creating roles. I don’t understand the attributes and descriptions with placeholders. Additionally, the Keycloak Admin UI is not displaying in the Dev UI.
+23. **Blog HTTP requests with user**: The HTTP requests for blogs with user roles are not working as expected. They return authentication errors. I need to define the roles and permissions properly.
+24. 
