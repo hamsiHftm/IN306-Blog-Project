@@ -22,6 +22,8 @@ public class User {
     @Column(unique = true, nullable = false, updatable = false)
     private String email;
 
+    private String picUrl;
+
     @NotEmpty
     @Column(nullable = false)
     private String password;

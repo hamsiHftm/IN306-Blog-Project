@@ -15,6 +15,7 @@ public record BlogDetailResponseDTO1(
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         long numberOfLikes,
+        String picUrl,
         List<CommentResponseDTO2> comments,
         UserDetailResponseDTO1 user) {
 
@@ -25,6 +26,7 @@ public record BlogDetailResponseDTO1(
                 blog.getCreatedAt(),
                 blog.getUpdatedAt(),
                 blog.getNumberOfLikes(),
+                blog.getPicUrl(),
                 blog.getComments().stream()
                         .map(CommentResponseDTO2::new)
                         .collect(Collectors.toList()),

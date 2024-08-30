@@ -31,10 +31,12 @@ public class BlogResource {
 
     @GET
     @Path("public")
-    @RolesAllowed("quest")
+    // @RolesAllowed("quest")
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Get all blogs with pagination and search")
+    // TODO remove the method here
     public Response getAllBlogs(@QueryParam("searchTitle") String searchTitle,
+                                @QueryParam("userId") Integer userId,
                                 @QueryParam("limit") @DefaultValue("10") int limit,
                                 @QueryParam("offset") @DefaultValue("0") int offset,
                                 @QueryParam("orderBy") @DefaultValue("createdAt") String orderBy,
@@ -48,7 +50,7 @@ public class BlogResource {
                 dto = new ErrorResponseDTO1("Invalid orderBy field. Supported fields: createdAt, title, etc.");
                 isSuccess = false;
             } else {
-                List<Blog> blogs = blogService.getAllBlogs(searchTitle, orderBy, limit, offset, asc);
+                List<Blog> blogs = blogService.getAllBlogs(searchTitle, userId, orderBy, limit, offset, asc);
                 List<BlogResponseDTO1> blogDTOs = blogs.stream()
                         .map(BlogResponseDTO1::new)
                         .collect(Collectors.toList());
@@ -68,6 +70,7 @@ public class BlogResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Get blog by ID")
     @RolesAllowed("quest")
+    // TODO remove the method here
     public Response getBlogById(@PathParam("id") Long id) {
         Response.Status status = Response.Status.OK;
         Object dto = null;

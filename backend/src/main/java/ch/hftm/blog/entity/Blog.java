@@ -31,6 +31,8 @@ public class Blog {
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
+    private String picUrl;
+
     @Column(updatable = false)
     private LocalDateTime createdAt;
 

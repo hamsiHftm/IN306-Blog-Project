@@ -15,13 +15,14 @@ public class BlogService {
     @Inject
     BlogRepository blogRepository;
 
-    public List<Blog> getAllBlogs(String searchTitle, String order_by, int limit, int offset, boolean asc) {
+    public List<Blog> getAllBlogs(String searchTitle, Integer userId, String order_by, int limit, int offset, boolean asc) {
         List<Blog> blogs;
         if (searchTitle == null || searchTitle.isEmpty()) {
-            blogs = blogRepository.findAllBlogsWithLimitAndOffset(limit, offset, order_by, asc);
+            blogs = blogRepository.findAllBlogsByUserWithLimitAndOffset(userId, limit, offset, order_by, asc);
         } else {
-            blogs = blogRepository.findAllBlogsWithTitleAndLimitAndOffset(searchTitle, limit, offset, order_by, asc);
+            blogs = blogRepository.findAllBlogsByUserAndTitleWithLimitAndOffset(searchTitle, userId, limit, offset, order_by, asc);
         }
+
         Log.info("Returning " + blogs.size() + " blogs");
         return blogs;
     }
