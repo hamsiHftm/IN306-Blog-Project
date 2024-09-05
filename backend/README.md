@@ -244,4 +244,4 @@ The application follows a consistent response schema for handling HTTP responses
 21. **Rating HTTP requests**: Http Route fully implemented for rating model with schema
 22. **KeyCloak Integration**: Keycloak integration is not working. I am still having issues creating roles. I don’t understand the attributes and descriptions with placeholders. Additionally, the Keycloak Admin UI is not displaying in the Dev UI.
 23. **Blog HTTP requests with user**: The HTTP requests for blogs with user roles are not working as expected. They return authentication errors. I need to define the roles and permissions properly.
-24. 
+24. **Authentication concept removed**: For flutter project
