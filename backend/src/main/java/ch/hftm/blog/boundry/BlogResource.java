@@ -12,9 +12,11 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.SecurityContext;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 
 import java.util.List;
@@ -29,12 +31,12 @@ public class BlogResource {
     @Inject
     UserService userService;
 
+    @Context
+    SecurityContext securityContext;
+
     @GET
-    @Path("public")
-    // @RolesAllowed("quest")
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Get all blogs with pagination and search")
-    // TODO remove the method here
     public Response getAllBlogs(@QueryParam("searchTitle") String searchTitle,
                                 @QueryParam("userId") Integer userId,
                                 @QueryParam("limit") @DefaultValue("10") int limit,
@@ -69,8 +71,6 @@ public class BlogResource {
     @Path("/public/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Get blog by ID")
-    @RolesAllowed("quest")
-    // TODO remove the method here
     public Response getBlogById(@PathParam("id") Long id) {
         Response.Status status = Response.Status.OK;
         Object dto = null;
@@ -91,10 +91,10 @@ public class BlogResource {
         }
         return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
-
+    
+    // TODO only login user and user-id should match the login user, otherwise not allowed. It not logged in not authenticated 
     @GET
     @Path("favourites/{userId}")
-    @RolesAllowed("registered_user")
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Get favorite blogs by user ID with pagination and search")
     public Response getFavoriteBlogsByUserId(@PathParam("userId") Long userId,
@@ -107,12 +107,20 @@ public class BlogResource {
         Object dto = null;
         boolean isSuccess = true;
         try {
-            List<Blog> blogs = blogService.getFavoriteBlogsByUserId(userId, searchTitle,orderBy, limit, offset, asc);
-            List<BlogResponseDTO1> blogDTOs = blogs.stream()
-                    .map(BlogResponseDTO1::new)
-                    .collect(Collectors.toList());
-            long count = blogService.countAllBlogs(searchTitle, userId);
-            dto = new BlogListResponseDTO1(blogDTOs, offset, limit, searchTitle, count);
+            String loggedInUser = securityContext.getUserPrincipal().getName();
+            User currentUser = userService.getUserByEmail(loggedInUser);
+            if (currentUser == null || !currentUser.getId().equals(userId)) {
+                status = Response.Status.FORBIDDEN;
+                dto = new ErrorResponseDTO1("Not authorized to view favorite blogs for this user");
+                isSuccess = false;
+            } else {
+                List<Blog> blogs = blogService.getFavoriteBlogsByUserId(userId, searchTitle,orderBy, limit, offset, asc);
+                List<BlogResponseDTO1> blogDTOs = blogs.stream()
+                        .map(BlogResponseDTO1::new)
+                        .collect(Collectors.toList());
+                long count = blogService.countAllBlogs(searchTitle, userId);
+                dto = new BlogListResponseDTO1(blogDTOs, offset, limit, searchTitle, count);
+            }
         } catch (Exception e) {
             status = Response.Status.INTERNAL_SERVER_ERROR;
             dto = new ErrorResponseDTO1(e.getMessage());
@@ -121,8 +129,8 @@ public class BlogResource {
         return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
+    // TODO only login user. It not logged in not authenticated
     @POST
-    @RolesAllowed("registered_user")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
@@ -151,9 +159,10 @@ public class BlogResource {
         return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
+    // TODO only login user and user-id should match the login user, whoever created the blog, otherwise not allowed. It not logged in not authenticated
     @PATCH
     @Path("{id}")
-    @RolesAllowed("registered_user")
+    // @RolesAllowed("registered_user")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Update a blog by ID")
@@ -179,9 +188,10 @@ public class BlogResource {
         return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
+    // TODO only login user and user-id should match the login user, whoever created the blog, otherwise not allowed. It not logged in not authenticated
     @DELETE
     @Path("{id}")
-    @RolesAllowed("registered_user")
+    // @RolesAllowed("registered_user")
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Delete a blog by ID")
     public Response deleteBlog(@PathParam("id") Long id) {
