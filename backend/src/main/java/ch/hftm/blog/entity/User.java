@@ -28,6 +28,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    // TODO change to enum
+    private String role;
+
     private String firstName;
 
     private String lastName;

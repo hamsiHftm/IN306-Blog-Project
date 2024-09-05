@@ -43,7 +43,7 @@ public class UserService {
 
     @Transactional
     public User changePassword(User user, String newPassword) {
-        user.setPassword(newPassword); // Assuming you have a setPassword method in User entity
+        user.setPassword(newPassword);
         userRepository.persist(user);
         Log.info("Password changed for user " + user.getEmail());
         return user;
@@ -54,5 +54,9 @@ public class UserService {
         Long id = user.getId();
         userRepository.delete(user);
         Log.info("Deleted user with id " + id);
+    }
+
+    public boolean checkPassword(User user, String password) {
+        return user.getPassword().equals(password); // Replace with hash comparison in the future
     }
 }

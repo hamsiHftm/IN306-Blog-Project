@@ -45,36 +45,6 @@ public class UserResource {
         return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
     }
 
-    @POST
-    @Path("/login/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Login user")
-    public Response loginUser(@Valid UserLoginDTO1 userLoginDTO) {
-        Response.Status status = Response.Status.OK;
-        Object dto = null;
-        boolean isSuccess = true;
-        try {
-            User user = userService.getUserByEmail(userLoginDTO.email());
-            if (user == null) {
-                status = Response.Status.NOT_FOUND;
-                dto = new ErrorResponseDTO1("User not found with email");
-                isSuccess = false;
-            } else if (!user.getPassword().equals(userLoginDTO.password())) {
-                status = Response.Status.FORBIDDEN;
-                dto = new ErrorResponseDTO1("Wrong password");
-                isSuccess = false;
-            } else {
-                dto = new UserDetailResponseDTO1(user);
-            }
-        } catch (Exception e) {
-            status = Response.Status.INTERNAL_SERVER_ERROR;
-            dto = new ErrorResponseDTO1(e.getMessage());
-            isSuccess = false;
-        }
-        return Response.status(status).entity(new ResponseDTO1(isSuccess, dto)).build();
-    }
-
     @PATCH
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
