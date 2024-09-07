@@ -33,12 +33,12 @@ public class BlogRepository implements PanacheRepository<Blog> {
 
     // Method to find all blogs by user and title with limit, offset, and sorting
     public List<Blog> findAllBlogsByUserAndTitleWithLimitAndOffset(String searchTitle, Integer userId, int limit, int offset, String orderBy, boolean asc) {
-        String query = "select b from Blog b where b.title like ?2";
+        String query = "select b from Blog b where b.title like ?1";
         Object[] params;
 
         if (userId != null) {
-            query += " and b.user.id = ?1";
-            params = new Object[]{userId, "%" + searchTitle + "%"};
+            query += " and b.user.id = ?2";
+            params = new Object[]{"%" + searchTitle + "%", userId};
         } else {
             params = new Object[]{"%" + searchTitle + "%"};
         }

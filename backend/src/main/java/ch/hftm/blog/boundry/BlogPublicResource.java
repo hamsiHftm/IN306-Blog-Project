@@ -16,6 +16,8 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.smallrye.config.common.utils.StringUtil.isNumeric;
+
 @Path("public/blog")
 public class BlogPublicResource {
     @Inject
@@ -34,6 +36,11 @@ public class BlogPublicResource {
         Object dto = null;
         boolean isSuccess = true;
         try {
+            if (userId != null && !isNumeric(userId.toString())) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity(new ErrorResponseDTO1("Invalid userId: Must be a numeric value"))
+                        .build();
+            }
             if (!isValidOrderByField(orderBy)) {
                 status = Response.Status.BAD_REQUEST;
                 dto = new ErrorResponseDTO1("Invalid orderBy field. Supported fields: createdAt, title, etc.");
