@@ -5,33 +5,7 @@ This Blog Application is built using Quarkus and provides a simple REST API for 
 - **Retrieve all blog posts**: Users can fetch a list of all blog posts available in the system
 - **Retrieve a single blog post**: Users can retrieve a specific blog post by its unique identifier.
 - **Add new blog posts**: Users can create and add new blog posts to the system.
-- **Manage users**: Users can register, login, and manage their accounts. 
-- **Comment on blog posts**: Users can comment on blog posts and view comments on each post. 
-- **Like blog posts**: Users can like blog posts to show appreciation or agreement with the content. 
-- **Rate blog posts**: Users can rate blog posts based on their quality or relevance.
-
-## Roles and Permissions
-
-1. **Guest (Not Logged In)**:
-    - **Access**: Read-only access to view blog posts and comments.
-    - **Actions**: Can view blog posts and comments but cannot interact (create, edit, or delete) with the content or use features like rating and liking.
-
-2. **Registered User (Logged In)**:
-    - **Access**: Full access to their own content (blogs, comments) and interactive features.
-    - **Actions**:
-        - Can register, log in, and manage their account.
-        - Can create, edit, and delete their own blog posts and comments.
-        - Can like, dislike, and rate blog posts.
-        - Can delete their account.
-    - **Role Assignment**: When a user creates an account, they are automatically assigned the "Registered User" role.
-
-3. **Admin**:
-    - **Access**: Full control over the system, including all users and content.
-    - **Actions**:
-        - Can manage all users (e.g., delete accounts, assign roles).
-        - Can edit or delete any content (posts, comments).
-        - Has administrative control to ensure proper maintenance and support.
-    - **Role Management**: Other admins can assign the "Admin" role to a registered user. The system always maintains at least one admin account to ensure continued oversight and management.
+- **Manage users**: Users can register, login. 
 
 
 ## Project Structure
@@ -144,58 +118,6 @@ The application follows a consistent response schema for handling HTTP responses
 - Ensure Docker is installed on your machine.
 
 ### Steps to Start the Project
-
-#### Keycloak - IN306-Blog
-1. **Start Keycloak Container**
-   Use the following command to start a Keycloak container:
-   ```sh
-   docker network create blog-nw
-   docker run --name keycloak --network blog-nw -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin -e KC_HTTP_PORT=8180 -e KC_HOSTNAME_URL=http://keycloak:8180 -p 8180:8180 -d quay.io/keycloak/keycloak:22.0.1 start-dev
-   ```
-2. **Add Custom Hostname**
-   Update /etc/hosts File:
-     To access Keycloak using the hostname keycloak, add the following line to your /etc/hosts file:
-     ```
-      127.0.0.1 keycloak
-     ```
-3. **Set-up IN306-Blog realm**
-   - Access Keycloak Admin Console:
-     - Open your web browser and navigate to http://keycloak:8180/.
-     - Log in using the admin credentials set in the Docker command
-     ```
-     username: admin
-     password: admin
-     ```
-   - Create Realm:
-       - Go to the `Master` drop-down menu in the top-left corner.
-       - Select `Add realm`.
-       - Name your realm IN306-Blog and click `Create`.
-4. **Create Roles**
-    - In the Keycloak admin console, select the IN306-Blog realm.
-    - Click on `Roles` in the left-hand menu.
-    - Click on `Add user`
-    - Enter a username. `alice`.
-    - Click `save`.
-    - After saving, navigate to the `Credentials tab.
-    - Set a password for the user and ensure the `Temporary` checkbox is unchecked.
-    - Go to the `Role Mappings` tab.
-    - In the “Available Roles” section, select admin and click `Add selected`.
-    - This assigns the admin role to the user.
-5. **Update client secret config**:
-   - Finding the Client Secret:
-     - To get the client secret, navigate to the Keycloak admin console. 
-     - Go to the IN306-Blog realm.
-     - Click on `Clients` in the left-hand menu. 
-     - Select your client (the one you specified in quarkus.oidc.client-id). 
-     - Go to the “Credentials” tab. You’ll find the client secret here. Copy this value and use it in your application.properties.
-   - Update application.properties:
-     - Update your application.properties with Keycloak configuration. Replace <mein-secret> with the actual client secret from Keycloak:
-       ```
-        quarkus.oidc.credentials.secret=<my-secret>
-       ```
-
-(TODO - Add Realm.json file to set up realm automatically....)
-
 #### Blog - Backend Component
 1. **Clone the Repository**:
    ```sh
@@ -210,6 +132,7 @@ The application follows a consistent response schema for handling HTTP responses
    ```
    To prevent data loss during development, it's essential to specify an external volume path (quarkus.datasource.devservices.volumes) in application.properties. This ensures that the MySQL database data is stored outside the Docker container.
 
+Example SQL Queries: To initialize the database with sample data, you can use the provided SQL scripts located in the resources/data_query directory. For example, you can execute Blog.sql to insert sample blog data.
 
 3. **Run the Application**:
    Use Maven to start the application:
@@ -219,29 +142,3 @@ The application follows a consistent response schema for handling HTTP responses
 
    The application will be available at `http://localhost:8080`.
 
-
-## Change History
-1. **Project created**: Initial project setup.
-2. **Blog Model**: Added the Blog model class.
-3. **DB Connection (repository and service)**: Implemented database connection, repository, and service layers for blog.
-4. **Project structure**: Defined the overall project structure.
-5. **REST API paths added**: Added REST API endpoints for blog operations.
-6. **Entity**: I tried adding a new entity, but it didn't work. I need help fixing this or removing the entity entirely.
-7. **Entities**: All entity classes have been added for the project. 
-8. **OpenAPI**: An OpenAPI specification has been added to the resources folder, but it is not yet complete. Due to time constraints, I was unable to finish it.
-9. **Blog HTTP requests**: Implemented PUT, POST, GET, and DELETE routes for the Blog entity.
-10. **Error-Response**: Added thorough error handling in the way responses are managed.
-11. **Validation**: Validation added for entities.
-12. **User Repository**: Necessary User Repository added.
-13. **CreateBlogRequestDTO Schema:** Schema for creating blog request added
-14. **Schema improved**: Schema for get all blogs added
-15. **application.properties**: Property file updated for DB data
-16. **User HTTP requests**: Http Route fully implemented for user model with schema
-17. **Blog HTTP requests**: Http Route fully implemented for blog model with schema
-18. **Comment HTTP requests**: Http Route fully implemented for comment model with schema
-19. **BlogLike HTTP requests**: Http Route fully implemented for blogLike model with schema
-20. **CommentLike HTTP requests**: Http Route fully implemented for commentLike model with schema
-21. **Rating HTTP requests**: Http Route fully implemented for rating model with schema
-22. **KeyCloak Integration**: Keycloak integration is not working. I am still having issues creating roles. I don’t understand the attributes and descriptions with placeholders. Additionally, the Keycloak Admin UI is not displaying in the Dev UI.
-23. **Blog HTTP requests with user**: The HTTP requests for blogs with user roles are not working as expected. They return authentication errors. I need to define the roles and permissions properly.
-24. **Authentication concept removed**: For flutter project
