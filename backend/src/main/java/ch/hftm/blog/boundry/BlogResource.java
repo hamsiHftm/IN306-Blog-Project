@@ -38,7 +38,7 @@ public class BlogResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Get all blogs with pagination and search")
     public Response getAllBlogs(@QueryParam("searchTitle") String searchTitle,
-                                @QueryParam("userId") Integer userId,
+                                @QueryParam("userId") Long userId,
                                 @QueryParam("limit") @DefaultValue("10") int limit,
                                 @QueryParam("offset") @DefaultValue("0") int offset,
                                 @QueryParam("orderBy") @DefaultValue("createdAt") String orderBy,
@@ -56,7 +56,7 @@ public class BlogResource {
                 List<BlogResponseDTO1> blogDTOs = blogs.stream()
                         .map(BlogResponseDTO1::new)
                         .collect(Collectors.toList());
-                long count = blogService.countAllBlogs(searchTitle, null);
+                long count = blogService.countAllBlogs(searchTitle, userId);
                 dto = new BlogListResponseDTO1(blogDTOs, offset, limit, searchTitle, count);
             }
         } catch (Exception e) {

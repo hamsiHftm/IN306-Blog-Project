@@ -15,7 +15,7 @@ public class BlogService {
     @Inject
     BlogRepository blogRepository;
 
-    public List<Blog> getAllBlogs(String searchTitle, Integer userId, String order_by, int limit, int offset, boolean asc) {
+    public List<Blog> getAllBlogs(String searchTitle, Long userId, String order_by, int limit, int offset, boolean asc) {
         List<Blog> blogs;
         if (searchTitle == null || searchTitle.isEmpty()) {
             blogs = blogRepository.findAllBlogsByUserWithLimitAndOffset(userId, limit, offset, order_by, asc);

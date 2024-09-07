@@ -11,7 +11,7 @@ import java.util.List;
 public class BlogRepository implements PanacheRepository<Blog> {
 
     // Method to find all blogs by user with limit, offset, and sorting
-    public List<Blog> findAllBlogsByUserWithLimitAndOffset(Integer userId, int limit, int offset, String orderBy, boolean asc) {
+    public List<Blog> findAllBlogsByUserWithLimitAndOffset(Long userId, int limit, int offset, String orderBy, boolean asc) {
         String query = "select b from Blog b where b.user.id = ?1";
         Object[] params = new Object[]{userId};
 
@@ -32,7 +32,7 @@ public class BlogRepository implements PanacheRepository<Blog> {
     }
 
     // Method to find all blogs by user and title with limit, offset, and sorting
-    public List<Blog> findAllBlogsByUserAndTitleWithLimitAndOffset(String searchTitle, Integer userId, int limit, int offset, String orderBy, boolean asc) {
+    public List<Blog> findAllBlogsByUserAndTitleWithLimitAndOffset(String searchTitle, Long userId, int limit, int offset, String orderBy, boolean asc) {
         String query = "select b from Blog b where b.title like ?1";
         Object[] params;
 

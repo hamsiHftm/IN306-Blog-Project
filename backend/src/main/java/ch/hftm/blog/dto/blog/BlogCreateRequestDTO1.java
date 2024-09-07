@@ -13,10 +13,13 @@ public record BlogCreateRequestDTO1(
         @NotBlank(message = "Content must not be null")
         String content,
         @NotNull(message = "User ID cannot be null.")
-        Long userId) {
+        Long userId,
+        String picUrl
+        ) {
 
     public Blog toBlog(User user) {
         Blog blog = new Blog(title, content);
+        blog.setPicUrl(picUrl);
         blog.setUser(user);
         return blog;
     }
