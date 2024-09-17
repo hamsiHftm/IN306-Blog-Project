@@ -4,6 +4,7 @@ import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.annotation.PostConstruct;
 
+// Warning: NOT IN USE
 @Startup
 @ApplicationScoped
 public class ApplicationLifecycle {

@@ -28,7 +28,8 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    // TODO change to enum
+    @NotEmpty
+    @Column(nullable = false)
     private String role;
 
     private String firstName;
@@ -41,9 +42,4 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> createdComments = new ArrayList<>();
 
-    // Maybe add list of blogLike and comment like when needed...
-
-    // TODO profile pic as binary
-//    @Lob
-//    private byte[] profilePicture;
 }

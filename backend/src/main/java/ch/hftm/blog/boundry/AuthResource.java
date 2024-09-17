@@ -3,7 +3,6 @@ package ch.hftm.blog.boundry;
 import ch.hftm.blog.dto.ErrorResponseDTO1;
 import ch.hftm.blog.dto.ResponseDTO1;
 import ch.hftm.blog.dto.login.LoginResponseDTO1;
-import ch.hftm.blog.dto.user.UserDetailResponseDTO1;
 import ch.hftm.blog.dto.login.LoginRequestDTO1;
 import ch.hftm.blog.service.AuthService;
 import jakarta.inject.Inject;
@@ -46,7 +45,7 @@ public class AuthResource {
                 dto = new ErrorResponseDTO1("Wrong password");
                 isSuccess = false;
             } else {
-                String token = authService.generateJwtToken(user.getEmail(), user.getId());
+                String token = authService.generateJwtToken(user);
                 dto = new LoginResponseDTO1(user, token);
             }
         } catch (Exception e) {

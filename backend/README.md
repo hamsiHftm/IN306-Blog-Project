@@ -16,7 +16,7 @@ This Blog Application is built using Quarkus and provides a simple REST API for 
     - **Access**: Read-only access to view blog posts and comments.
     - **Actions**: Can view blog posts and comments but cannot interact (create, edit, or delete) with the content or use features like rating and liking.
 
-2. **Registered User (Logged In)**:
+2. **Registered User (Logged In) / Tech.name "user"**:
     - **Access**: Full access to their own content (blogs, comments) and interactive features.
     - **Actions**:
         - Can register, log in, and manage their account.
@@ -25,7 +25,7 @@ This Blog Application is built using Quarkus and provides a simple REST API for 
         - Can delete their account.
     - **Role Assignment**: When a user creates an account, they are automatically assigned the "Registered User" role.
 
-3. **Admin**:
+3. **Admin / Tech.name "admin"**:
     - **Access**: Full control over the system, including all users and content.
     - **Actions**:
         - Can manage all users (e.g., delete accounts, assign roles).
@@ -144,58 +144,6 @@ The application follows a consistent response schema for handling HTTP responses
 - Ensure Docker is installed on your machine.
 
 ### Steps to Start the Project
-
-#### Keycloak - IN306-Blog
-1. **Start Keycloak Container**
-   Use the following command to start a Keycloak container:
-   ```sh
-   docker network create blog-nw
-   docker run --name keycloak --network blog-nw -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin -e KC_HTTP_PORT=8180 -e KC_HOSTNAME_URL=http://keycloak:8180 -p 8180:8180 -d quay.io/keycloak/keycloak:22.0.1 start-dev
-   ```
-2. **Add Custom Hostname**
-   Update /etc/hosts File:
-     To access Keycloak using the hostname keycloak, add the following line to your /etc/hosts file:
-     ```
-      127.0.0.1 keycloak
-     ```
-3. **Set-up IN306-Blog realm**
-   - Access Keycloak Admin Console:
-     - Open your web browser and navigate to http://keycloak:8180/.
-     - Log in using the admin credentials set in the Docker command
-     ```
-     username: admin
-     password: admin
-     ```
-   - Create Realm:
-       - Go to the `Master` drop-down menu in the top-left corner.
-       - Select `Add realm`.
-       - Name your realm IN306-Blog and click `Create`.
-4. **Create Roles**
-    - In the Keycloak admin console, select the IN306-Blog realm.
-    - Click on `Roles` in the left-hand menu.
-    - Click on `Add user`
-    - Enter a username. `alice`.
-    - Click `save`.
-    - After saving, navigate to the `Credentials tab.
-    - Set a password for the user and ensure the `Temporary` checkbox is unchecked.
-    - Go to the `Role Mappings` tab.
-    - In the “Available Roles” section, select admin and click `Add selected`.
-    - This assigns the admin role to the user.
-5. **Update client secret config**:
-   - Finding the Client Secret:
-     - To get the client secret, navigate to the Keycloak admin console. 
-     - Go to the IN306-Blog realm.
-     - Click on `Clients` in the left-hand menu. 
-     - Select your client (the one you specified in quarkus.oidc.client-id). 
-     - Go to the “Credentials” tab. You’ll find the client secret here. Copy this value and use it in your application.properties.
-   - Update application.properties:
-     - Update your application.properties with Keycloak configuration. Replace <mein-secret> with the actual client secret from Keycloak:
-       ```
-        quarkus.oidc.credentials.secret=<my-secret>
-       ```
-
-(TODO - Add Realm.json file to set up realm automatically....)
-
 #### Blog - Backend Component
 1. **Clone the Repository**:
    ```sh
@@ -245,3 +193,4 @@ The application follows a consistent response schema for handling HTTP responses
 22. **KeyCloak Integration**: Keycloak integration is not working. I am still having issues creating roles. I don’t understand the attributes and descriptions with placeholders. Additionally, the Keycloak Admin UI is not displaying in the Dev UI.
 23. **Blog HTTP requests with user**: The HTTP requests for blogs with user roles are not working as expected. They return authentication errors. I need to define the roles and permissions properly.
 24. **Authentication concept removed**: For flutter project
+25. **JWT Token**: Jwt Token added and implemented authentication logic for blog
