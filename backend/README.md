@@ -38,72 +38,74 @@ This Blog Application is built using Quarkus and provides a simple REST API for 
 The project follows a standard Quarkus structure:
 
 ```
-└── java
-    └── ch
-        └── hftm
-            └── blog
-                ├── boundary
-                │   ├── BlogLikeResource.java            // REST resource for handling blog likes
-                │   ├── BlogResource.java                // REST resource for handling blogs
-                │   ├── CommentLikeResource.java         // REST resource for handling comment likes
-                │   ├── CommentResource.java             // REST resource for handling comments
-                │   ├── RatingResource.java              // REST resource for handling ratings
-                │   └── UserResource.java                // REST resource for handling users
-                ├── dto
-                │   ├── ErrorResponseDTO1.java            // DTO for error responses
-                │   ├── ResponseDTO1.java                 // Generic DTO for response handling
-                │   ├── blog
-                │   │   ├── BlogCreateRequestDTO1.java     // Request DTO for creating a blog
-                │   │   ├── BlogDetailResponseDTO1.java    // Response DTO for detailed blog response, which includes comments
-                │   │   ├── BlogListResponseDTO1.java      // Response DTO for listing blogs
-                │   │   ├── BlogResponseDTO1.java          // Base DTO for blog responses, which includes numberOfLikes and user info
-                │   │   ├── BlogResponseDTO2.java          // DTO for blog responses, which has only title and id for simple lookup
-                │   │   └── BlogUpdateRequestDTO1.java     // Request DTO for updating a blog
-                │   ├── comment
-                │   │   ├── CommentCreateRequestDTO1.java  // Request DTO for creating a comment
-                │   │   ├── CommentResponseDTO1.java       // Base DTO for comment responses, with blog info
-                │   │   ├── CommentResponseDTO2.java       // Additional DTO for comment responses, without blog info
-                │   │   └── CommentUpdateRequestDTO1.java  // Request DTO for updating a comment
-                │   ├── rating
-                │   │   └── RatingResponseDTO1.java         // DTO for rating responses
-                │   └── user
-                │       ├── UserChangePasswordRequestDTO1.java  // Request DTO for changing user password
-                │       ├── UserCreateRequestDTO1.java          // Request DTO for creating a user
-                │       ├── UserDetailResponseDTO1.java         // Response DTO for detailed user response
-                │       ├── UserLoginDTO1.java                  // Request DTO for user login
-                │       └── UserUpdateRequestDTO1.java          // Request DTO for updating a user
-                ├── entity
-                │   ├── Blog.java                        // Entity class for blogs
-                │   ├── BlogLike.java                    // Entity class for blog likes
-                │   ├── Comment.java                     // Entity class for comments
-                │   ├── CommentLike.java                 // Entity class for comment likes
-                │   ├── Rating.java                      // Entity class for ratings
-                │   └── User.java                        // Entity class for users
-                ├── repository
-                │   ├── BlogLikeRepository.java          // Repository interface for blog likes
-                │   ├── BlogRepository.java              // Repository interface for blogs
-                │   ├── CommentLikeRepository.java       // Repository interface for comment likes
-                │   ├── CommentRepository.java           // Repository interface for comments
-                │   ├── RatingRepository.java            // Repository interface for ratings
-                │   └── UserRepository.java              // Repository interface for users
-                └── service
-                    ├── BlogLikeService.java             // Service class for blog like operations
-                    ├── BlogService.java                 // Service class for blog operations
-                    ├── CommentLikeService.java          // Service class for comment like operations
-                    ├── CommentService.java              // Service class for comment operations
-                    ├── RatingService.java               // Service class for rating operations
-                    └── UserService.java                 // Service class for user operations
-                    
+└├── java
+│   └── ch
+│       └── hftm
+│           └── blog
+│               ├── boundry
+│               │   ├── AuthResource.java
+│               │   ├── BlogLikeResource.java
+│               │   ├── BlogResource.java
+│               │   ├── CommentLikeResource.java
+│               │   ├── CommentResource.java
+│               │   ├── RatingResource.java
+│               │   └── UserResource.java
+│               ├── dto
+│               │   ├── ErrorResponseDTO1.java
+│               │   ├── ResponseDTO1.java
+│               │   ├── blog
+│               │   │   ├── BlogCreateRequestDTO1.java
+│               │   │   ├── BlogDetailResponseDTO1.java
+│               │   │   ├── BlogListResponseDTO1.java
+│               │   │   ├── BlogResponseDTO1.java
+│               │   │   ├── BlogResponseDTO2.java
+│               │   │   └── BlogUpdateRequestDTO1.java
+│               │   ├── comment
+│               │   │   ├── CommentCreateRequestDTO1.java
+│               │   │   ├── CommentResponseDTO1.java
+│               │   │   ├── CommentResponseDTO2.java
+│               │   │   └── CommentUpdateRequestDTO1.java
+│               │   ├── login
+│               │   │   ├── LoginRequestDTO1.java
+│               │   │   └── LoginResponseDTO1.java
+│               │   ├── rating
+│               │   │   └── RatingResponseDTO1.java
+│               │   └── user
+│               │       ├── UserChangePasswordRequestDTO1.java
+│               │       ├── UserCreateRequestDTO1.java
+│               │       ├── UserDetailResponseDTO1.java
+│               │       └── UserUpdateRequestDTO1.java
+│               ├── entity
+│               │   ├── Blog.java
+│               │   ├── BlogLike.java
+│               │   ├── Comment.java
+│               │   ├── CommentLike.java
+│               │   ├── Rating.java
+│               │   └── User.java
+│               ├── repository
+│               │   ├── BlogLikeRepository.java
+│               │   ├── BlogRepository.java
+│               │   ├── CommentLikeRepository.java
+│               │   ├── CommentRepository.java
+│               │   ├── RatingRepository.java
+│               │   └── UserRepository.java
+│               ├── service
+│               │   ├── AuthService.java
+│               │   ├── BlogLikeService.java
+│               │   ├── BlogService.java
+│               │   ├── CommentLikeService.java
+│               │   ├── CommentService.java
+│               │   ├── RatingService.java
+│               │   └── UserService.java
+│               └── util
+│                   ├── ApplicationLifecycle.java
+│                   └── KeyGeneratorHelper.java
 └── resources
-    ├── Blog.drawio.png        // Diagram or image related to blogs (assuming it's a diagram of some sort)
-    └── data_query
-        ├── Blog.sql           // SQL script for blog-related data
-        ├── BlogLike.sql       // SQL script for blog like-related data
-        ├── Comment.sql        // SQL script for comment-related data
-        ├── CommentLike.sql    // SQL script for comment like-related data
-        ├── Rating.sql         // SQL script for rating-related data
-        └── User.sql           // SQL script for user-related data
+    ├── META-INF
+    └── application.properties
+
 ```
+
 - **boundary**: Contains REST resource classes (*Resource.java) that handle HTTP requests related to different components of the blog application (blogs, comments, likes, ratings, users).
 - **dto**: Contains DTO (Data Transfer Object) classes (*DTO.java) used for representing data in API requests and responses.
   - Subpackages (blog, comment, rating, user) organize DTOs based on the entity they represent.
@@ -111,6 +113,7 @@ The project follows a standard Quarkus structure:
 - **repository**: Contains repository interfaces (*Repository.java) that define methods for interacting with the database for each entity.
 - **entity**: Contains entity classes (*.java) that represent data objects stored in the database.
 - **application.properties**: Configuration file for application settings, including database connection details.
+- **util**: Helper classes for this project
 
 
 - **resources**: Directory for non-Java resources. 
@@ -142,6 +145,7 @@ The application follows a consistent response schema for handling HTTP responses
 - Ensure you have JDK 11 or later installed.
 - Make sure you have Maven installed.
 - Ensure Docker is installed on your machine.
+- Have MySQL installed or use a MySQL container.
 
 ### Steps to Start the Project
 #### Blog - Backend Component
@@ -152,20 +156,79 @@ The application follows a consistent response schema for handling HTTP responses
    ```
 
 2. **Configure the Database**:
-   The application.properties file in your project includes all the necessary configurations to set up the database for the Blog Application. Ensure to replace the volume path with your preferred external location to prevent data loss:
+   - The application.properties file in your project includes all the necessary configurations to set up the database for the Blog Application. Ensure to replace the volume path with your preferred external location to prevent data loss:
    ```sh
    quarkus.datasource.devservices.volumes."{your-volume-path-for-db}"=/var/lib/mysql
    ```
    To prevent data loss during development, it's essential to specify an external volume path (quarkus.datasource.devservices.volumes) in application.properties. This ensures that the MySQL database data is stored outside the Docker container.
 
+  - Configure MySQL in MySQL Workbench:
+    ```
+        Port: 51995
+	    URL: localhost (or the IP address of your MySQL server)
+        Usrname: quarkus
+	    Password: quarkus
+    ```
+    
+3. **Initialize the Database**:
+   Run SQL scripts to set up the database schema and initial data:
+   - Use MySQL Workbench or a similar tool to execute the SQL files in resources/data_query/
+   - Alternatively, you can create data manually using the /user POST endpoint and other endpoints.
+   ```sh
+   ./mvnw quarkus:dev
+   ```
 
-3. **Run the Application**:
+4. **Run the Application**:
    Use Maven to start the application:
    ```sh
    ./mvnw quarkus:dev
    ```
 
-   The application will be available at `http://localhost:8080`.
+The application will be available at http://localhost:8080.
+
+## Authenticating API Endpoints Using Swagger UI
+
+To access protected endpoints in the Blog Application, you need to authenticate using a JWT (JSON Web Token). Here’s how you can do it using Swagger UI:
+
+1. **Obtain Login Credentials**:
+    - If you have used the SQL scripts from `resources/data_query/` to set up the initial data, you can use the provided credentials for login.
+        ```Normal User
+      {
+        "username": "jan.doe@example.com",
+        "password": "password1"
+      }
+      ```
+      
+        ```Admin User
+      {
+        "username": "james.wilson@example.com",
+        "password": "password12"
+      }
+      ```
+    - Alternatively, you can create a new user using the `/user` POST endpoint. Ensure you have created a user with a username and password.
+
+2. **Login to Obtain a JWT Token**:
+    - In Swagger UI, you can use the `/login` endpoint to authenticate and obtain a JWT token.
+    - Locate the **/login** endpoint in the list of endpoints.
+    - Click on the **Try it out** button for the `/login` endpoint.
+    - Provide your username and password in the request body. Example:
+      ```json
+      {
+        "username": "your-username",
+        "password": "your-password"
+      }
+      ```
+    - Click **Execute** to send the request.
+    - The response will include a JWT token.
+
+3. **Authorize Using Swagger UI**:
+    - After obtaining the JWT token, click the **Authorize** button at the top of the Swagger UI page.
+    - In the authorization dialog, paste the JWT token into the **Value** field in the format `Bearer your-token-here`.
+    - Click **Authorize** to apply the token to all subsequent requests.
+
+4. **Access Protected Endpoints**:
+    - With the token authorized, you can now access protected endpoints that require authentication.
+    - Swagger UI will automatically include the JWT token in the authorization header of your requests.
 
 
 ## Change History
