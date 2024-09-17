@@ -195,3 +195,4 @@ The application follows a consistent response schema for handling HTTP responses
 24. **Authentication concept removed**: For flutter project
 25. **JWT Token**: Jwt Token added and implemented authentication logic for blog
 26. **Authentication logic added for User Resource**: Authentication logic added for user
+27. **Quarkus Test added**: Automation test added for both Auth and Blog
