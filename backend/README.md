@@ -259,3 +259,5 @@ To access protected endpoints in the Blog Application, you need to authenticate 
 25. **JWT Token**: Jwt Token added and implemented authentication logic for blog
 26. **Authentication logic added for User Resource**: Authentication logic added for user
 27. **Quarkus Test added**: Automation test added for both Auth and Blog
+28. **Authenticatio Logic added**
+29. **Continuous Testing implemented**
