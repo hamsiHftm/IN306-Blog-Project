@@ -2,18 +2,19 @@ package ch.hftm.blog.boundry;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 @QuarkusTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BlogResourceTest {
 
     private static final String BLOG_URL = "/blogs";
     private static final String AUTH_HEADER = "Authorization";
     private static String BEARER_TOKEN;
+    private static Integer blogId;
 
     @BeforeEach
     public void setup() {
@@ -22,21 +23,20 @@ public class BlogResourceTest {
                 .contentType(ContentType.JSON)
                 .body("{\"email\": \"jan.doe@example.com\", \"password\": \"password1\"}")
                 .when()
-                .post("/auth/login") // Adjust the endpoint based on your authentication service
+                .post("/auth/login")
                 .then()
                 .statusCode(200)
                 .extract().asString();
 
-        // Extract the token from the response
         BEARER_TOKEN = extractTokenFromResponse(loginResponse);
     }
 
     private String extractTokenFromResponse(String response) {
-        // Assuming the response is in JSON format and contains a field "token"
-        return io.restassured.path.json.JsonPath.from(response).getString("token");
+        return io.restassured.path.json.JsonPath.from(response).getString("data.token");
     }
 
     @Test
+    @Order(1)
     public void testGetAllBlogsSuccess() {
         given()
                 .when()
@@ -47,17 +47,7 @@ public class BlogResourceTest {
     }
 
     @Test
-    public void testGetBlogByIdSuccess() {
-        given()
-                .when()
-                .get(BLOG_URL + "/1")
-                .then()
-                .statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("isSuccess", equalTo(true));
-    }
-
-    @Test
+    @Order(2)
     public void testGetFavoriteBlogsByUserIdSuccess() {
         given()
                 .header(AUTH_HEADER, "Bearer " + BEARER_TOKEN)
@@ -70,10 +60,11 @@ public class BlogResourceTest {
     }
 
     @Test
+    @Order(3)
     public void testAddBlogSuccess() {
         String newBlogJson = "{ \"userId\": 1, \"title\": \"New Blog\", \"content\": \"Content of new blog\" }";
 
-        given()
+        String response = given()
                 .header(AUTH_HEADER, "Bearer " + BEARER_TOKEN)
                 .body(newBlogJson)
                 .contentType(ContentType.JSON)
@@ -82,10 +73,26 @@ public class BlogResourceTest {
                 .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
+                .body("isSuccess", equalTo(true))
+                .extract().asString();
+
+        blogId = io.restassured.path.json.JsonPath.from(response).getInt("data.id");
+    }
+
+    @Test
+    @Order(4)
+    public void testGetBlogByIdSuccess() {
+        given()
+                .when()
+                .get(BLOG_URL + "/" + blogId)
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
                 .body("isSuccess", equalTo(true));
     }
 
     @Test
+    @Order(5)
     public void testUpdateBlogSuccess() {
         String updatedBlogJson = "{ \"title\": \"Updated Title\", \"content\": \"Updated Content\" }";
 
@@ -94,7 +101,7 @@ public class BlogResourceTest {
                 .body(updatedBlogJson)
                 .contentType(ContentType.JSON)
                 .when()
-                .patch(BLOG_URL + "/1")
+                .patch(BLOG_URL + "/" + blogId)
                 .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
@@ -102,14 +109,15 @@ public class BlogResourceTest {
     }
 
     @Test
+    @Order(6)
     public void testDeleteBlogSuccess() {
         given()
                 .header(AUTH_HEADER, "Bearer " + BEARER_TOKEN)
                 .when()
-                .delete(BLOG_URL + "/1")
+                .delete(BLOG_URL + "/" + blogId)
                 .then()
                 .statusCode(200)
-                .body(equalTo("Blog deleted successfully")); // Adjust if the response is different
+                .body("isSuccess", equalTo(true))
+                .body("data", equalTo("Blog deleted successfully"));
     }
-
 }

@@ -35,9 +35,6 @@ public class BlogResource {
     @Inject
     UserService userService;
 
-    @Context
-    JsonWebToken jwt;
-
     @GET
     @PermitAll
     @Produces(MediaType.APPLICATION_JSON)

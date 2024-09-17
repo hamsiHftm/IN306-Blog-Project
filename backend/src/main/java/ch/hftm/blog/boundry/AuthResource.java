@@ -5,6 +5,7 @@ import ch.hftm.blog.dto.ResponseDTO1;
 import ch.hftm.blog.dto.login.LoginResponseDTO1;
 import ch.hftm.blog.dto.login.LoginRequestDTO1;
 import ch.hftm.blog.service.AuthService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -26,6 +27,7 @@ public class AuthResource {
     AuthService authService;
 
     @POST
+    @PermitAll
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
