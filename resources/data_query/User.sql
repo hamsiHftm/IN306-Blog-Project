@@ -11,7 +11,7 @@ VALUES
     ('susan.davis@example.com', 'password9', 'Susan', 'Davis', 'https://media.licdn.com/dms/image/C5603AQHcmVgaBpEOdg/profile-displayphoto-shrink_400_400/0/1517739994238?e=2147483647&v=beta&t=MmkBT13aT3VMv3VXd6P2P5JZTLFd-WnZwGf8v9-0ofM', 'user'),
     ('michael.rodriguez@example.com', 'password10', 'Michael', 'Rodriguez', 'https://play-lh.googleusercontent.com/7oW_TFaC5yllHJK8nhxHLQRCvGDE8jYIAc2SWljYpR6hQlFTkbA6lNvER1ZK-doQnQ', 'user'),
     ('karen.martinez@example.com', 'password11', 'Karen', 'Martinez', 'https://pics.craiyon.com/2023-10-25/b65f72d6d11a48c1bc560059cc36e31f.webp', 'user'),
-    ('james.wilson@example.com', 'password12', 'James', 'Wilson', 'https://play-lh.googleusercontent.com/7oW_TFaC5yllHJK8nhxHLQRCvGDE8jYIAc2SWljYpR6hQlFTkbA6lNvER1ZK-doQnQ=w240-h480-rw', 'user'),
+    ('james.wilson@example.com', 'password12', 'James', 'Wilson', 'https://play-lh.googleusercontent.com/7oW_TFaC5yllHJK8nhxHLQRCvGDE8jYIAc2SWljYpR6hQlFTkbA6lNvER1ZK-doQnQ=w240-h480-rw', 'admin'),
     ('patricia.moore@example.com', 'password13', 'Patricia', 'Moore', 'https://pics.craiyon.com/2023-11-27/rYloVD3fSHSJfEPvVsqoZQ.webp', 'user'),
     ('robert.taylor@example.com', 'password14', 'Robert', 'Taylor', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUTZEXczxjynDLA7ozqCRaYHmiCAJw8AGNFmvbu3mUuYRVvWsWJYtKl0pfnpzliGVxUSQ&usqp=CAU', 'user'),
     ('linda.anderson@example.com', 'password15', 'Linda', 'Anderson', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLx2T_xZsBPwl8DjKqWsTX4FX-YswttX_IawtzCGonmiXyS8SdxNO8ToTuDU__ZVw0PpY&usqp=CAU', 'user'),

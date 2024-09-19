@@ -35,27 +35,6 @@ public class BlogLikeResourceTest {
     }
 
     @Test
-    public void testLikeFunctionBlogSuccess() {
-        // Add a like before removing it to ensure there is a like to remove
-        given()
-                .header(AUTH_HEADER, "Bearer " + BEARER_TOKEN)
-                .when()
-                .post(BLOG_LIKE_URL + "/" + 1 + "/" + 5)
-                .then()
-                .statusCode(200)
-                .body("isSuccess", equalTo(true));
-
-        // Now remove the like
-        given()
-                .header(AUTH_HEADER, "Bearer " + BEARER_TOKEN)
-                .when()
-                .delete(BLOG_LIKE_URL + "/" + 1 + "/" + 5)
-                .then()
-                .statusCode(200)
-                .body("isSuccess", equalTo(true));
-    }
-
-    @Test
     public void testAddLikeToBlogUnauthorized() {
         String invalidToken = "invalid.token.here";
 

@@ -147,7 +147,7 @@ The application follows a consistent response schema for handling HTTP responses
 - Ensure Docker is installed on your machine.
 - Have MySQL installed or use a MySQL container.
 
-### Steps to Start the Project
+### Steps to Start the Project - DEV mode
 #### Blog - Backend Component
 1. **Clone the Repository**:
    ```sh
