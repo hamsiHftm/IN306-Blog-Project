@@ -37,46 +37,40 @@ INSERT INTO Comment (content, createdAt, blog_id, user_id) VALUES
 -- Comments for Blog 6
 INSERT INTO Comment (content, createdAt, blog_id, user_id) VALUES
                                                                ('Thanks for the detailed explanation.', NOW(), 6, 22),
-                                                               ('I appreciate the effort.', NOW(), 6, 23);
+                                                               ('I appreciate the effort.', NOW(), 6, 1);
 
 -- Comments for Blog 7 (No comments)
 
 -- Comments for Blog 8
 INSERT INTO Comment (content, createdAt, blog_id, user_id) VALUES
-                                                               ('Interesting perspective.', NOW(), 8, 24),
-                                                               ('I''m sharing this with my colleagues.', NOW(), 8, 25);
+                                                               ('Interesting perspective.', NOW(), 8, 1),
+                                                               ('I''m sharing this with my colleagues.', NOW(), 8, 2);
 
 -- Comments for Blog 9
 INSERT INTO Comment (content, createdAt, blog_id, user_id) VALUES
-    ('Looking forward to more from you.', NOW(), 9, 26);
+    ('Looking forward to more from you.', NOW(), 9, 1);
 
--- Comments for Blog 10
-INSERT INTO Comment (content, createdAt, blog_id, user_id) VALUES
-                                                               ('This is exactly what I needed.', NOW(), 10, 27),
-                                                               ('I have a suggestion.', NOW(), 10, 28),
-                                                               ('Can you explain this in more detail?', NOW(), 10, 29);
-
+-- Comments for Blog 10 (No comments)
 -- Comments for Blog 11 (No comments)
 
 -- Comments for Blog 12
 INSERT INTO Comment (content, createdAt, blog_id, user_id) VALUES
-                                                               ('I''m glad I found this blog.', NOW(), 12, 30),
-                                                               ('This resonates with me.', NOW(), 12, 31),
-                                                               ('Could you write about topic X next?', NOW(), 12, 32);
+                                                               ('I''m glad I found this blog.', NOW(), 12, 12),
+                                                               ('This resonates with me.', NOW(), 12, 13),
+                                                               ('Could you write about topic X next?', NOW(), 12, 14);
 
 -- Comments for Blog 13
 INSERT INTO Comment (content, createdAt, blog_id, user_id) VALUES
-                                                               ('I have a question about point Y.', NOW(), 13, 33),
-                                                               ('I''ve shared this on social media.', NOW(), 13, 34);
+                                                               ('I have a question about point Y.', NOW(), 13, 1),
+                                                               ('I''ve shared this on social media.', NOW(), 13, 3);
 
 -- Comments for Blog 14 (No comments)
 
 -- Comments for Blog 15
 INSERT INTO Comment (content, createdAt, blog_id, user_id) VALUES
-                                                               ('Very helpful.', NOW(), 15, 35),
-                                                               ('I''ve subscribed to your newsletter.', NOW(), 15, 36),
-                                                               ('Can you recommend further reading?', NOW(), 15, 37),
-                                                               ('Please write more about topic Z.', NOW(), 15, 38);
+                                                               ('Very helpful.', NOW(), 15, 4),
+                                                               ('I''ve subscribed to your newsletter.', NOW(), 15, 1),
+                                                               ('Can you recommend further reading?', NOW(), 15, 2),
+                                                               ('Please write more about topic Z.', NOW(), 15, 3);
 
 
-SELECT * FROM Comment;

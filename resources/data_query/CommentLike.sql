@@ -1,7 +1,3 @@
-SELECT * FROM Commentlike;
-
--- Example insert queries for CommentLike with varying likes per comment
-
 -- Comment 1: Randomly choose 5 users to like
 INSERT INTO CommentLike (comment_id, user_id)
 SELECT 1, id
@@ -146,10 +142,10 @@ SELECT 24, id
 FROM (SELECT id FROM User ORDER BY RAND() LIMIT 20) AS subquery24
 WHERE id NOT IN (SELECT user_id FROM CommentLike WHERE comment_id = 24);
 
--- Comment 25: Randomly choose 25 users to like
+-- Comment 25: Randomly choose 22 users to like
 INSERT INTO CommentLike (comment_id, user_id)
 SELECT 25, id
-FROM (SELECT id FROM User ORDER BY RAND() LIMIT 25) AS subquery25
+FROM (SELECT id FROM User ORDER BY RAND() LIMIT 22) AS subquery25
 WHERE id NOT IN (SELECT user_id FROM CommentLike WHERE comment_id = 25);
 
 -- Comment 26: Randomly choose 8 users to like
@@ -211,24 +207,3 @@ INSERT INTO CommentLike (comment_id, user_id)
 SELECT 35, id
 FROM (SELECT id FROM User ORDER BY RAND() LIMIT 18) AS subquery35
 WHERE id NOT IN (SELECT user_id FROM CommentLike WHERE comment_id = 35);
-
--- Comment 36: Randomly choose 10 users to like
-INSERT INTO CommentLike (comment_id, user_id)
-SELECT 36, id
-FROM (SELECT id FROM User ORDER BY RAND() LIMIT 10) AS subquery36
-WHERE id NOT IN (SELECT user_id FROM CommentLike WHERE comment_id = 36);
-
--- Comment 37: Randomly choose 15 users to like
-INSERT INTO CommentLike (comment_id, user_id)
-SELECT 37, id
-FROM (SELECT id FROM User ORDER BY RAND() LIMIT 15) AS subquery37
-WHERE id NOT IN (SELECT user_id FROM CommentLike WHERE comment_id = 37);
-
--- Comment 38: Randomly choose 6 users to like
-INSERT INTO CommentLike (comment_id, user_id)
-SELECT 38, id
-FROM (SELECT id FROM User ORDER BY RAND() LIMIT 6) AS subquery38
-WHERE id NOT IN (SELECT user_id FROM CommentLike WHERE comment_id = 38);
-
-
-
