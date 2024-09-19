@@ -139,7 +139,43 @@ The application follows a consistent response schema for handling HTTP responses
 - ErrorResponseDTO1:
   - errorMsg: String containing an error message describing the reason for the failure.
 
-## How to Start the Project
+## How to Start the Project - PROD
+
+### Prerequisites
+1. Ensure you have Docker installed on your machine.
+
+### Steps to Run the Application
+1. Pull the Quarkus Docker Image:
+ ```
+  docker pull ghcr.io/hamsiHftm/code-with-quarkus:1.0.0
+ ```
+2. Run the MySQL Container:
+Run a MySQL container with the necessary environment variables. Adjust the ports and credentials as needed:
+ ```
+ docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=blogdb -e MYSQL_USER=blog -e MYSQL_PASSWORD=blog -p 3307:3306 -d mysql:latest
+ ```
+3. Configure MySQL Tool:
+Use MySQL Workbench or another MySQL client to connect to the MySQL container:
+•	Port: 3307
+•	Hostname: localhost
+•	Username: blog
+•	Password: blog
+4. Initialize the Database:
+   Execute the SQL scripts located in `resources/data_query/ to set up the initial database schema and demo data. You can do this in MySQL Workbench by executing the scripts or manually creating data using the /user POST endpoint, after started the application container
+5. Start the Quarkus Application:
+   Run the Quarkus Docker image:
+```
+docker run -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:mysql://localhost:3307/blogdb \
+           -e QUARKUS_DATASOURCE_USERNAME=blog \
+           -e QUARKUS_DATASOURCE_PASSWORD=blog \
+           -p 9091:9090 \
+           ghcr.io/hamsihftm/code-with-quarkus:1.0.0
+```
+6. Access the Application:
+   Open your browser and go to http://localhost:9091/api-docs to view the API documentation.
+
+
+## How to Start the Project in DEV mode
 
 ### Prerequisites
 - Ensure you have JDK 11 or later installed.
@@ -147,7 +183,7 @@ The application follows a consistent response schema for handling HTTP responses
 - Ensure Docker is installed on your machine.
 - Have MySQL installed or use a MySQL container.
 
-### Steps to Start the Project - DEV mode
+### Steps to Start the Project 
 #### Blog - Backend Component
 1. **Clone the Repository**:
    ```sh
