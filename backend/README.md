@@ -152,17 +152,17 @@ The application follows a consistent response schema for handling HTTP responses
 2. Run the MySQL Container:
 Run a MySQL container with the necessary environment variables. Adjust the ports and credentials as needed:
  ```
- docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=blogdb -e MYSQL_USER=blog -e MYSQL_PASSWORD=blog -p 3307:3306 -d mysql:latest
+ docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=blogdb -e MYSQL_USER=bloguser -e MYSQL_PASSWORD=blogpassword -p 3307:3306 -d mysql:latest
  ```
 3. Configure MySQL Tool:
 Use MySQL Workbench or another MySQL client to connect to the MySQL container:
+```
 •	Port: 3307
 •	Hostname: localhost
-•	Username: blog
-•	Password: blog
-4. Initialize the Database:
-   Execute the SQL scripts located in `resources/data_query/ to set up the initial database schema and demo data. You can do this in MySQL Workbench by executing the scripts or manually creating data using the /user POST endpoint, after started the application container
-5. Start the Quarkus Application:
+•	Username: bloguser
+•	Password: blogpassword
+```
+4. Start the Quarkus Application:
    Run the Quarkus Docker image:
 ```
 docker run -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:mysql://localhost:3307/blogdb \
@@ -171,6 +171,9 @@ docker run -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:mysql://localhost:3307/blogdb \
            -p 9091:9090 \
            ghcr.io/hamsihftm/code-with-quarkus:1.0.0
 ```
+5. Initialize the Database:
+   Execute the SQL scripts located in `resources/data_query/` to set up the initial database schema and demo data. You can do this in MySQL Workbench by executing the scripts or manually creating data using the /user POST endpoint, after started the application container
+
 6. Access the Application:
    Open your browser and go to http://localhost:9091/api-docs to view the API documentation.
 
@@ -228,14 +231,15 @@ To access protected endpoints in the Blog Application, you need to authenticate 
 
 1. **Obtain Login Credentials**:
     - If you have used the SQL scripts from `resources/data_query/` to set up the initial data, you can use the provided credentials for login.
-        ```Normal User
+      **Normal user:**  
+      ``` 
       {
         "username": "jan.doe@example.com",
         "password": "password1"
       }
       ```
-      
-        ```Admin User
+      **Admin user:**
+        ``` 
       {
         "username": "james.wilson@example.com",
         "password": "password12"
@@ -259,7 +263,7 @@ To access protected endpoints in the Blog Application, you need to authenticate 
 
 3. **Authorize Using Swagger UI**:
     - After obtaining the JWT token, click the **Authorize** button at the top of the Swagger UI page.
-    - In the authorization dialog, paste the JWT token into the **Value** field in the format `Bearer your-token-here`.
+    - In the authorization dialog, paste the JWT token into the **Value** field in the format `your-token-here`.
     - Click **Authorize** to apply the token to all subsequent requests.
 
 4. **Access Protected Endpoints**:
